@@ -10,12 +10,14 @@
 export default {
   name: 'add_reduce',
   data() {
-  	return {}
+  	return {
+  		count: this.goods.count || 1
+  	}
   },
   computed: {
-  	count() {
-  		return this.goods.count || 1; 
-  	}
+  	// count() {
+  	// 	return this.goods.count || 1; 
+  	// }
   },
   props:{
   	goods: {
@@ -26,11 +28,13 @@ export default {
   	reduce() {
   		if(this.goods.count > 1) {
   			this.goods.count--;
+  			this.count = this.goods.count;
   			this.$emit('getCount', this.goods);
   		}
   	},
   	add() {
   		this.goods.count++;
+  		this.count = this.goods.count;
   		this.$emit('getCount', this.goods)
   	},
   	number_only() {
@@ -39,31 +43,28 @@ export default {
   			this.$refs.inputbox.value = value.replace(/[^\d]/g,'');
   		} else {
   			this.goods.count = value;
+  			this.count = this.goods.count;
   			this.$emit('getCount', this.goods)
   		}
   		
-  		console.log(value,this.goods.count);
+  		// console.log(value,this.goods.count);
   	},
   	zero_judge() {
   		var value = this.$refs.inputbox.value;
   		if( value == 0 || !value) {
-  			this.goods.count = 1;
   			this.$refs.inputbox.value = 1;
+  			this.goods.count = 1;
+  			this.count = this.goods.count;
   			this.$emit('getCount', this.goods);
   		}
   	}
-  }/*,
+  },
   watch: {
   	count(newVal, oldVal) {
-  		if(!(/^[1-9]\d*$/.test(newVal))) {
-  			console.log('不是正整数')
-  			this.goods.count = oldVal;
-  		} else {
-  			this.goods.count = newVal;
-  		}
+  		console.log(newVal, oldVal)
   	}
   	
-  }*/
+  }
 }
 </script>
 
