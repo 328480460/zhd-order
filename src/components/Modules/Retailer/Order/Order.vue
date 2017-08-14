@@ -21,7 +21,7 @@
 			<ul>
 				<li v-for="(item,key) in order_compute" :key=key>
 					<div class="order-header">
-						<div class="shop-name">{{item.shop_name}} &gt;</div>
+						<div class="shop-name" @click='goShop(item)'>{{item.shop_name}} &gt;</div>
 						<div class="state" :class={}>{{item.state}}</div>
 					</div>
 					<div class="goods-info">
@@ -45,7 +45,7 @@
 					<div class="order-footer">
 						<div class="pay-state">{{item.pay_state}}</div>
 						<ul class="optionList">
-							<li v-for='(btnText,key) in item.btnList' :key=key @click='btnOption(btnText)' :class="{cancle: btnText == '取消订单'}">
+							<li v-for='(btnText,key) in item.btnList' :key=key @click='btnOption(btnText,item)' :class="{cancle: btnText == '取消订单'}">
 								{{btnText}}
 							</li>
 						</ul>
@@ -70,16 +70,16 @@ export default {
       llsMap: {
 		    '定期结算': {
 		        '未付款': {
-		            '待配货': [ '再次购买', '取消订单', '立即付款'],
-		            '已配货': [ '再次购买', '立即付款'],
-		            '已发货': [ '再次购买', '确认收货', '立即付款'],
-		            '已收货': [ '再次购买', '立即付款'],
-		            '已取消': [ '再次购买']
+		            '待配货': ['取消订单', '立即付款', '再次购买'],
+		            '已配货': ['立即付款', '再次购买'],
+		            '已发货': ['立即付款', '确认收货','再次购买'],
+		            '已收货': ['立即付款', '再次购买'],
+		            '已取消': ['再次购买', '删除']
 		        },
 		        '已付款': {
 		            '待配货': ['取消订单', '再次购买'],
 		            '已配货': ['再次购买'],
-		            '已发货': ['再次购买', '确认收货'],
+		            '已发货': ['确认收货','再次购买'],
 		            '已收货': ['再次购买'],
 		            '已取消': ['再次购买']
 		        },
@@ -87,21 +87,27 @@ export default {
 		        	'待配货': ['再次购买'],
 		            '已配货': ['再次购买'],
 		            '已收货': ['再次购买'],
-		            '已取消': ['再次购买']
+		            '已取消': ['再次购买','删除']
+		        },
+		        '交易完成':{
+		        	'待配货': ['再次购买'],
+		            '已配货': ['再次购买'],
+		            '已收货': ['再次购买'],
+		            '已取消': ['再次购买','删除']
 		        }
 		    },
 		    '在线支付': {
 		        '未付款': {
 		            '待配货': ['取消订单', '立即付款'],
-		            '已配货': ['再次购买', '立即付款'],
-		            '已发货': ['再次购买', '确认收货', '立即付款'],
-		            '已收货': ['再次购买', '立即付款'],
-		            '已取消': ['再次购买']
+		            '已配货': ['立即付款', '再次购买'],
+		            '已发货': ['立即付款', '确认收货','再次购买'],
+		            '已收货': ['立即付款', '再次购买'],
+		            '已取消': ['再次购买','删除']
 		        },
 		        '已付款': {
 		            '待配货': ['取消订单', '再次购买'],
 		            '已配货': ['再次购买'],
-		            '已发货': ['再次购买', '确认收货'],
+		            '已发货': ['确认收货','再次购买'],
 		            '已收货': ['再次购买'],
 		            '已取消': ['再次购买']
 		        },
@@ -109,16 +115,22 @@ export default {
 		        	'待配货': ['再次购买'],
 		            '已配货': ['再次购买'],
 		            '已收货': ['再次购买'],
-		            '已取消': ['再次购买']
+		            '已取消': ['再次购买','删除']
+		        },
+		         '交易完成':{
+		        	'待配货': ['再次购买'],
+		            '已配货': ['再次购买'],
+		            '已收货': ['再次购买'],
+		            '已取消': ['再次购买','删除']
 		        }
 		    },
 		    '货到付款': {
 		        '未付款': {
-		            '待配货': ['再次购买', '立即付款'],
-		            '已配货': ['再次购买', '立即付款'],
-		            '已发货': ['再次购买', '立即付款'],
-		            '已收货': ['再次购买', '立即付款'],
-		            '已取消': ['再次购买']
+		            '待配货': ['立即付款', '再次购买'],
+		            '已配货': ['立即付款', '再次购买'],
+		            '已发货': ['立即付款', '再次购买'],
+		            '已收货': ['立即付款', '再次购买'],
+		            '已取消': ['再次购买','删除']
 		        },
 		        '已付款': {
 		            '待配货': ['再次购买'],
@@ -131,36 +143,57 @@ export default {
 		        	'待配货': ['再次购买'],
 		            '已配货': ['再次购买'],
 		            '已收货': ['再次购买'],
-		            '已取消': ['再次购买']
+		            '已取消': ['再次购买','删除']
+		        },
+		         '交易完成':{
+		        	'待配货': ['再次购买'],
+		            '已配货': ['再次购买'],
+		            '已收货': ['再次购买'],
+		            '已取消': ['再次购买','删除']
 		        }
 		    }
+
 		}
     }
   },
   methods:{
   	goBack() {
-  		this.$router.go(-1);
+  		this.$router.push({path: '/retailer/my'})
   	},
   	reRouter(keyWord) {
   		this.$router.replace({path:'/retailer/order', query: { limit: keyWord }});
   		this.render();
-  		console.log(this.order);
   	},
   	render() {
   		var query = this.$route.query;
-	  	this.$store.dispatch('retailer',query).then((res) => {
-	  		this.order = res.data.data.order;
+	  	this.$store.dispatch('order',query).then((res) => {
+	  		this.order = res.data.data;
 		  	this.current = query.limit;
 	  	}).catch((res) => {
 	  		alert('ERROR');
 	  	})
   	},
-  	btnOption(text) {
-  		console.log(text);
+  	btnOption(text,order) {
+
+  		this.$store.dispatch('order_operation',{operation:text,limit:this.current,order_id:order.order_id,order_code:order.order_code}).then((res) => {
+  			if(text == '再次购买') {
+  				this.$router.push({path:'/retailer/buycar'})
+  			}
+	  		this.order = res.data.data;
+
+	  	}).catch((res) => {
+	  		alert('ERROR');
+	  	})
+  	},
+  	goShop(orderInfo) {
+  		this.$router.push({path:'/retailer/shop',query:{shop_id: orderInfo.shop_id}})
   	}
   },
   computed: {
   	order_compute() {
+  		if(!this.order) {
+  			return this.order;
+  		}
   		var _this = this;
   		for (var i = 0; i < _this.order.length; i++) {
   			var _btnList = _this.llsMap[_this.order[i].pay_way][_this.order[i].pay_state][_this.order[i].state];

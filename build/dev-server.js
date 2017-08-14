@@ -22,21 +22,11 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 var compiler = webpack(webpackConfig)
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); 
 
-var apiRoutes = express.Router()
-
-var mockData = require('../mockData.js');
-var retailer = mockData.retailer;
-
-apiRoutes.post('/retailer/index',(req, res) => {
-  console.log('have a request');
-  res.json({
-    result: true,
-    data: retailer
-    
-  })
-});
-
+var mockServer = require('../mockServer.js');
+var apiRoutes = mockServer.interface(express);
 app.use('/api',apiRoutes);
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {

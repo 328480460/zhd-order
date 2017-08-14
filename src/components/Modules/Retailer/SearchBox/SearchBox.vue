@@ -21,12 +21,12 @@
 						<li v-for="(item, key) in search_info.hot" :key=key @click="fastEnter(item)">{{item}}</li>
 					</ul>
 				</div>
-				<div class="history" v-if="search_info.hostory">
+				<div class="history" v-if="history.length">
 					<h4 class="title">搜索历史</h4>
 					<ul>
 						<li v-for="(item, key) in search_info.hostory" :key=key @click="fastEnter(item)">{{item}}</li>
 					</ul>
-					<div class="clear-history" @click="clear_history">
+					<div class="clear-history" @click="clear_history" >
 						清空搜索历史
 					</div>
 				</div>
@@ -37,7 +37,7 @@
 				</ul>
 			</div>
 			<div class="step-3" v-if="step === 3" >
-				<div class="have-buy" v-if="have_buy"> 
+				<div class="have-buy" v-if="have_buy.length > 0 "> 
 					<h4>已买过的商品</h4>
 					<ul>
 						<li v-for="item in have_buy" class="goods-item">
@@ -63,11 +63,11 @@
 									</div>
 								</div>
 							</div>
-							<div class="foot">{{item.shop_name}}</div>
+							<div class="foot" @click='toShop(item)'>{{item.shop_name}}</div>
 						</li> 
 					</ul>
 				</div>
-				<div class="first-buy">
+				<div class="first-buy" v-if="first_buy.length > 0 ">
 					<h4>未购买过的商品</h4>
 					<ul class="goods-list" ref='goodsList'>
 						<li v-for="item in first_buy" class="goods-item">
@@ -94,7 +94,7 @@
 									
 								</div>
 							</div>
-							<div class="foot">{{item.shop_name}}</div>
+							<div class="foot" @click='toShop(item)'>{{item.shop_name}}</div>
 						</li>
 					</ul>
 				</div>
@@ -110,8 +110,11 @@ import Add_Reduce from '../../../Common/Add_Reduce/Add_Reduce.vue';
 export default {
   name: 'searchbox',
   created() {
-  	this.$store.dispatch('retailer').then((res) => {
-  		this.search_info = res.data.data.search_info;
+  	this.$store.dispatch('retailer_search').then((res) => {
+  		// console.log(res.data)
+  		if(res.data.result) {
+  			this.search_info = res.data.data;
+  		}
   	}).catch((res) => {
   		alert('ERROR');
   	})
@@ -127,13 +130,22 @@ export default {
   	var last_li_h = '';
   	var headerH = '';
   	var windowH = document.querySelector('.searchbox').clientHeight;
-  	var isLoading = false;
-  	var finish = false;
+  	
   	this.upload = function(){
-  		if(finish) {
+  		if(_this.isLoading) {
   			return;
   		}
-  		if(isLoading) {
+  		if(_this.finish) {
+  			if(_this.isToasting) {
+  				return
+  			}
+  			_this.$vux.toast.show({
+				text: '没有更多数据',
+				type: 'text',
+				position: 'bottom',
+				time:'2000'
+			})
+			_this.isToasting = true;
   			return;
   		}
   		if(!li) {
@@ -144,24 +156,20 @@ export default {
   		}
 		// console.log(windowH + document.body.scrollTop, last_li.offsetTop + last_li_h );
 		if(document.body.scrollTop + windowH > last_li.offsetTop + last_li_h) {
-			isLoading = true;
-			console.log('get');
-			_this.$store.dispatch('retailer').then((res) => {
-				var res = res.data.data.search_info.result.first_buy;
+			_this.isLoading = true;
+			// console.log('get');
+			_this.$store.dispatch('retailer_search',{'key_word': _this.key_word,'page': ++_this.page}).then((res) => {
+				var res = res.data.data.result.first_buy;
 				if(res) {
-					_this.first_buy = _this.first_buy.concat(res);
-					isLoading = false;
+					_this.search_info.result.first_buy = _this.search_info.result.first_buy.concat(res);
+					_this.isLoading = false;
 					li = '';
-				} else {
-					finish = true;
-					this.$vux.toast.show({
-						text: '没有更多数据',
-						type: 'text',
-						position: 'bottom',
-						time:'2000'
-					})
-				}
-				
+					// console.log(res.length);
+					if(res.length < 10) {
+
+						_this.finish = true;
+					}
+				} 
 				
 		  	}).catch((res) => {
 		  		alert('ERROR');
@@ -176,13 +184,40 @@ export default {
   data () {
     return {
     	search_info: '',
-    	search_key: '',
-    	have_buy:'',
-    	first_buy:'',
     	key_word: '',
       	step: 1,
       	flag: true,
+      	page: 1,
+      	isLoading : false,
+  		finish: false,
+  		isToasting: false
     }
+  },
+  computed: {
+  	history() {
+  		if(!this.search_info) {
+  			return [];
+  		}
+  		return this.search_info.hostory;
+  	},
+  	search_key() {
+  		if(!this.search_info) {
+  			return [];
+  		}
+  		return this.search_info.key_word;
+  	},
+  	have_buy() {
+  		if(!this.search_info) {
+  			return [];
+  		}
+  		return this.search_info.result.have_buy;
+  	},
+  	first_buy() {
+  		if(!this.search_info) {
+  			return [];
+  		}
+  		return this.search_info.result.first_buy;
+  	}
   },
   methods: {
   	goBack() {
@@ -200,10 +235,24 @@ export default {
   		}
   	},
   	serachKey(keyword) {
-  		this.$store.dispatch('retailer',{'key_word': keyword}).then((res) => {
-	  		this.search_key = res.data.data.search_info.key_word;
-	  		this.have_buy = this.search_info.result.have_buy;
-	  		this.first_buy = this.search_info.result.first_buy;
+  		// console.log('serachKey');
+  		this.page = 1;
+  		this.$store.dispatch('retailer_search',{'key_word': keyword, 'page':this.page}).then((res) => {
+  			// console.log(res)
+  			this.search_info = res.data.data;
+	  	}).catch((res) => {
+	  		alert('ERROR');
+	  	})
+  	},
+  	serachGoods(keyword) {
+  		document.body.scrollTop = 0;
+  		this.page = 1;
+  		this.isLoading = false;
+  		this.finish = false;
+  		this.isToasting =  false;
+  		this.$store.dispatch('retailer_search',{'key_word': keyword, 'page':this.page, history: true}).then((res) => {
+  			// console.log(res)
+  			this.search_info = res.data.data;
 	  	}).catch((res) => {
 	  		alert('ERROR');
 	  	})
@@ -218,11 +267,11 @@ export default {
   		this.key_word = val;
   		this.flag = false;
   		this.turnStep(3);
-  		this.serachKey(this.key_word );
+  		this.serachGoods(this.key_word );
   	},
   	clear_history() {
-  		this.$store.dispatch('retailer', {'option': 'delete_history'}).then((res) => {
-	  		this.search_info = res.data.data.search_info;
+  		this.$store.dispatch('retailer_search', {'option': 'delete_history'}).then((res) => {
+	  		this.search_info = res.data.data;
 	  	}).catch((res) => {
 	  		alert('ERROR');
 	  	})
@@ -230,29 +279,39 @@ export default {
   	getCount(value) {
   		// console.log(value);
   	},
-  	add_car(obj) {
-  		console.log(obj);
-  		if(!obj.count) {
-  			obj.count = 1;
+  	add_car(goods) {
+  		// console.log(obj);
+  		if(!goods.count) {
+  			goods.count = 1;
   		}
-  		this.$store.commit('add_shop_car', obj);
+
+  		this.$store.dispatch('add_goods', goods).then((res) => {
+	  		console.log(res.data);
+	  	}).catch((res) => {
+	  		alert('ERROR');
+	  	});
+
   		this.$vux.toast.show({
 			text: '添加成功',
 			type: 'text',
 			position: 'bottom',
 			time:'800'
 		})
-	}
-  	
+	},
+	toShop(item) {
+		this.$router.push({path:'/retailer/shop',query:{shop_id:item.shop_id}});
+	}	
   },
   watch: {
   	key_word(newVal, oldVal) {
-  		console.log(newVal, oldVal);
+  		// console.log(newVal, oldVal);
   		if(newVal == '' && this.flag) {
+  			this.page = 1;
   			this.turnStep(1);
   			return
   		}
   		if(newVal !== oldVal && this.flag) {
+  			this.page = 1;
   			this.turnStep(2);
   			this.serachKey(newVal);
   		}
@@ -367,6 +426,7 @@ export default {
 						border-radius: 26/@fs;
 						background-color: #f0f0f0;
 						margin-right: 20/@fs;
+						margin-bottom:15/@fs;
 					}
 				}
 			}

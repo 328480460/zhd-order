@@ -1,7 +1,7 @@
 <template>
 	 <div class="add-reduce">
 		<div class="reduce" @click='reduce'></div>
-		<input type="text" v-model='count'>
+		<div class="count">{{count}}</div>
 		<div class="add" @click='add'></div>
 	</div>
 </template>
@@ -24,26 +24,31 @@ export default {
   		if(this.goods.count > 1) {
   			this.goods.count--;
   			this.count = this.goods.count;
+  			this.$emit('getCount', this.goods)
+  		} else {
+  			console.log(this.goods.count);
+  			this.$emit('deleteGoods',this.goods)
   		}
   	},
   	add() {
   		this.goods.count++;
   		this.count = this.goods.count;
+  		this.$emit('getCount', this.goods)
   	}
   },
   watch: {
   	count(newVal, oldVal) {
-  		// console.log(newVal, oldVal);
+		// console.log(newVal, oldVal);
   		if(!(/^[1-9]\d*$/.test(newVal))) {
   			this.goods.count = oldVal;
   			this.count = this.goods.count;
   		} else {
   			this.goods.count = parseInt(newVal);
-  			this.$emit('getCount', this.goods)
+  			this.count = this.goods.count;
   		}
   	},
   	goods(newVal, oldVal) {
-  		// console.log(newVal, oldVal);
+  		
   		this.count = this.goods.count;
   	}
   	
@@ -81,14 +86,13 @@ export default {
 				margin-top: -2/@fs;
 			}
 		}
-		input {
+		.count {
 			height: 36/@fs;
-			width: 80/@fs;
-			padding-left: 10/@fs; 
+			line-height: 36/@fs;
+			width: 60/@fs;
+			text-align:center;
 			margin: 0 20/@fs;
-			outline: none;
-			border-radius: 4/@fs;
-			border:2/@fs solid #f26721;
+			border:none;
 		}
 		.add {
 			.reduce;

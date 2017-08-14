@@ -53,6 +53,7 @@ var retailer = {
 	'user_id': '0000000001',
 	'token': '472634723647236',
 	'identity': '0',
+	'address': ['北京市昌平区XX街XX路1', '北京市昌平区XX街XX路2', '北京市昌平区XX街XX路3', ],
 	'order': [{
 		'order_code': '123123213000001',
 		'shop_id': '123123',
@@ -101,7 +102,6 @@ var retailer = {
 			'total_price': '100',
 			'url': './images/goods_07.png'
 		}]
-
 	}, {
 		'order_code': '12312321000000',
 		'shop_id': '123123',
@@ -241,8 +241,303 @@ var retailer = {
 				'isChecked': true
 			}]
 		}
+	},
+	'shop_info': {
+		'shop_id': '0000010',
+		'shop_name': 'xxxxx店铺名称',
+		'market_id': '0012',
+		'market_name': '水屯批发市场',
+		'avata': './images/goods_03.png',
+		'usually': false,
+		'limit_time': '12:00',
+		'send_area': '全城',
+		'phone': '12312321321',
+		'shop_car': [],
+		'goods_list': {
+			'recommend': {
+				'name': '推荐',
+				'list': [{
+					'goods_name': '特级黄瓜1',
+					'goods_id': '000001',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜2',
+					'goods_id': '000002',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}]
+			},
+			'all': {
+				'name': '全部',
+				'list': [{
+					'goods_name': '特级黄瓜1',
+					'goods_id': '000001',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜2',
+					'goods_id': '000002',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜3',
+					'goods_id': '000003',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜4',
+					'goods_id': '000004',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜5',
+					'goods_id': '000005',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜6',
+					'goods_id': '000006',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜7',
+					'goods_id': '000007',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜1',
+					'goods_id': '000001',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜2',
+					'goods_id': '000002',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜3',
+					'goods_id': '000003',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜4',
+					'goods_id': '000004',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜5',
+					'goods_id': '000005',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜6',
+					'goods_id': '000006',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜7',
+					'goods_id': '000007',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}]
+			},
+			'leaf': {
+				'name': '叶类',
+				'list': [{
+					'goods_name': '特级黄瓜4',
+					'goods_id': '000004',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜5',
+					'goods_id': '000005',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}]
+			},
+			'root': {
+				'name': '根茎类',
+				'list': [{
+					'goods_name': '特级黄瓜4',
+					'goods_id': '000004',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜5',
+					'goods_id': '000005',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜6',
+					'goods_id': '000006',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}, {
+					'goods_name': '特级黄瓜7',
+					'goods_id': '000007',
+					'price': '1.99',
+					'standard': '10斤/袋',
+					'shop_id': '0000010',
+					'market_id': '0012',
+					'shop_name': 'xxxxx店铺名称',
+					'market_name': '水屯批发市场',
+					'url': './images/goods_07.png',
+					'count': 1,
+					'isChecked': true
+				}]
+			}
+		}
+	},
+	'car_info': {
+
 	}
-
-
 }
 module.exports.retailer = retailer;

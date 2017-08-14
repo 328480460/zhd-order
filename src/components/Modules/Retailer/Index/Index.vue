@@ -29,11 +29,11 @@
 			</ul>
 		</div>
 		<div class="option">
-			<div class="order">
+			<div class="order" @click='toMyOrlder'>
 				<img src="./images/order_icon.png">
 				我的订单
 			</div>
-			<div class="shop">
+			<div class="shop" @click='toUsualSop'>
 				<img src="./images/shop_icon.png">
 				常用店铺
 			</div>
@@ -76,11 +76,10 @@ export default {
   name: 'index',
   created() {
   	this.$store.dispatch('retailer','').then((res) => {
-  		this.$nextTick(() => {
-			if(res.data.result) {
-	  			this.info = res.data.data;
-	  		}
-  		})
+  		console.log(res);
+		if(res.data.result) {
+  			this.info = res.data.data;
+  		}
   	}).catch((res) => {
   		alert('ERROR');
   	})
@@ -110,6 +109,12 @@ export default {
   	},
   	toSearchBox() {
   		this.$router.push({path:'/retailer/searchbox'})
+  	},
+  	toMyOrlder() {
+  		this.$router.push({path:'/retailer/order',query:{limit: 'all'}})
+  	},
+  	toUsualSop() {
+  		alert('去常用店铺')
   	}
   },
   components: {

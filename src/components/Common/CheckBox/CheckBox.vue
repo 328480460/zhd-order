@@ -9,7 +9,6 @@ export default {
   name: 'checkbox',
   data() {
   	return {
-
   	}
   },
   props:{
@@ -19,11 +18,12 @@ export default {
   },
   computed: {
     isChecked() {
-        return this.goods.isChecked
+        return this.goods.isChecked 
     }
   },
   methods: {
     change() {
+      console.log(this.goods);
       this.goods.isChecked = !this.goods.isChecked;
       this.$emit('getCheckState', this.goods)
     }

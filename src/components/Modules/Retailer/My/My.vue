@@ -70,13 +70,11 @@ import v_footer from '../../../Common/Footer/Footer.vue'
 export default {
   name: 'my',
   created() {
-  	this.$store.dispatch('retailer','').then((res) => {
+  	this.$store.dispatch('retailer').then((res) => {
   		console.log(res);
-  		this.$nextTick(() => {
-			if(res.data.result) {
-	  			this.info = res.data.data;
-	  		}
-  		})	
+		if(res.data.result) {
+  			this.info = res.data.data;
+  		}	
   	}).catch((res) => {
   		alert('ERROR');
   	})

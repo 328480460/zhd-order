@@ -8,10 +8,10 @@
         	</div>
         </div>
         <div class="content">
-    		<div v-for="(item,key) in shop_info" class="order-item">
-    			<div class="shop-info" v-if='item.goodsList[0]'>
+    		<div v-for="(item,key) in shop_info" class="order-item" >
+    			<div class="shop-info" v-if='item.goodsList[0]' @click='toShop(item)'>
     				<div class="shop-name" >
-	    				<div class="checkbox" @click='check_shop(item.goodsList)' >
+	    				<div class="checkbox" @click.stop='check_shop(item.goodsList)' >
 						    <i class="icon-right" :class='{show: shop_check_state[key].isChecked}'></i>
 						</div>
 	    				<span>{{item.goodsList[0].shop_name}}</span>
@@ -31,7 +31,7 @@
 						</p>
 						<div class="add-reduce-car" >
 							<Add_Reduce @getCount='getCount' :goods='goods'></Add_Reduce>
-							<div class="delete"  @click='delete_goods(key,goods)'>
+							<div class="delete"  @click='delete_goods(goods)'>
 								<i class="icon-delete font"></i>
 							</div>
 						</div>
@@ -65,39 +65,89 @@
 import v_footer from '../../../Common/Footer/Footer.vue';
 import Add_Reduce from '../../../Common/Add_Reduce/Add_Reduce.vue';
 import CheckBox from '../../../Common/CheckBox/CheckBox.vue';
-import util from '../../../../assets/js/util.js';
 export default {
   name: 'shopcar',
+  created() {
+  	this.$store.dispatch('car').then((res) => {
+  		console.log(res.data);
+  		if(res.data.result) {
+			this.shop_info = res.data.data;
+  		}
+  	}).catch((res) => {
+  		alert('ERROR');
+  	})
+  },
   data () {
     return {
-    	shop_info: this.format_shop_car()
+    	shop_info: {},
     }
   },
   methods: {
-    getCount(value) {
-    	// console.log(value);
-    	this.$store.commit('updata_shop_car_count', value);
+    getCount(goods) {
+    	this.$store.dispatch('updata_goods', goods).then((res) => {
+	  		// console.log(res.data);
+	  	}).catch((res) => {
+	  		alert('ERROR');
+	  	});
     },
-    getCheckState(value) {
-    	// console.log(value);
-    	this.$store.commit('updata_check_state', value);
+    getCheckState(goods) {
+
     },
-    delete_goods(shop_id, goods) {
-    	this.$store.commit('delete_shop_car', [shop_id,goods]);
+    delete_goods(goods) {
+    	this.$store.dispatch('delete_goods', goods).then((res) => {
+	  		if(res.data.result) {
+  				this.shop_info = res.data.data;
+	  		}
+
+	  	}).catch((res) => {
+	  		alert('ERROR');
+	  	});
+
     },
-    check_shop(value) {
-    	this.$store.commit('updata_check_state_multi', value)
+    check_shop(shop) {
+    	var goods_list = shop;
+		for (var i = 0; i < goods_list.length; i++) {
+			if (!goods_list[i].isChecked) {
+				goods_list.forEach(function(value, index) {
+					value.isChecked = true;
+				})
+				return;
+			}
+		}
+		goods_list.forEach(function(value, index) {
+			value.isChecked = false;
+		})
+
     },
     check_all() {
-		this.$store.commit('updata_check_state_all')
+		var shopList = this.shop_info;
+		for (var i in shopList) {
+			for (var j = 0; j < shopList[i].goodsList.length; j++) {
+				if (!shopList[i].goodsList[j].isChecked) {
+					console.log('选中操作');
+					for (var i in shopList) {
+						shopList[i].goodsList.forEach(function(value, index) {
+							value.isChecked = true;
+						})
+					}
+					return
+				}
+			}
+		}
+		for (var i in shopList) {
+			shopList[i].goodsList.forEach(function(value, index) {
+				value.isChecked = false;
+			})
+		}
     },
     to_confirmorder() {
-    	var data = this.$store.state.shop_car;
+    	var data = this.shop_info;
     	var updata = {};
     	for(var i in data) {
-    		var _arr = data[i].filter(function(value,index) {
+    		var _arr = data[i].goodsList.filter(function(value,index) {
     			return value.isChecked;
     		});
+
     		if(_arr.length !== 0) {
     			updata[i] = _arr;
     		}
@@ -111,53 +161,73 @@ export default {
 			})
 			return;
     	}
-    	this.$store.commit('delete_shop_car_multi', updata);
+
     	this.$store.commit('create_current_order', updata)
     	this.$router.push({path: '/retailer/confirmOrder'});
     },
-    format_shop_car() {
-    	var _data = this.$store.state.shop_car;
-    	var _formatData = {}
-    	for (var i in _data) {
-    		_formatData[i] = {};
-    		_formatData[i]['goodsList'] = _data[i];
-    		_formatData[i]['isChecked'] = true;
-    	}
-    	for (var j in _formatData) {
-    		_formatData[j].goodsList.forEach(function(value, index) {
-    			if(!value.isChecked) {
-    				_formatData[j].isChecked = false;
-    			}
-    		})
-    	}
-    	
-    	// console.log(_formatData);
-    	return _formatData;
+    toShop(obj) {
+    	console.log(obj);
+    	var _shop_id = obj.goodsList[0].shop_id;
+    	this.$router.push({path: '/retailer/shop', query:{shop_id:_shop_id}})
     }
   },
   computed: {
   	allPrice() {
-  		return this.$store.state.shop_car_all_price;
+  		if(!this.shop_info) {
+  			return 0;
+  		}
+  		var shopList = this.shop_info;
+  		var allPrice = 0;
+		for (var i in shopList) {
+			shopList[i].goodsList.forEach(function(value, index) {
+				if (value.isChecked) {
+					allPrice += value.price * value.count;
+				}
+			})
+		}
+		return Math.floor(allPrice * 100) / 100;
+
   	},
   	shop_check_state() {
-  		var data = this.format_shop_car();
-  		return data
+		for (var j in this.shop_info) {
+			this.shop_info[j].isChecked = true;
+			for(var i = 0; i < this.shop_info[j].goodsList.length; i++ ) {
+				if(!this.shop_info[j].goodsList[i].isChecked) {
+					this.shop_info[j].isChecked = false;
+				}
+			}
+    	}
+  		return this.shop_info
   	},
   	
   	allCheck() {
-  		var _obj = this.format_shop_car();
-  		for(var i in _obj) {
-  			if(!_obj[i].isChecked) {
+  		for(var i in this.shop_info) {
+  			if(!this.shop_info[i].isChecked) {
   				return false
   			}
   		}
   		return true
   	},
   	empty_flg() {
-  		return this.$store.state.empty_flg;
+  		var shopList = this.shop_info;
+  		var flag = true;
+		for (var i in shopList) {
+			shopList[i].goodsList.forEach(function(value, index) {
+				if (value.length !== 0) {
+					flag = false;
+					return
+				}
+			})
+		}
+		return flag;
+  	}
+
+  },
+  watch: {
+  	shop_info(newVal, oldVal) {
+  		// console.log(newVal, oldVal);
   	}
   },
-  
   components: {
   	v_footer,
   	Add_Reduce,
