@@ -7,8 +7,10 @@
     			<p class="username">{{info.user_name}}</p>
     		</div>
     		<div class="myorder">
-    			<div class="title">我的订单</div>
-    			<div class="allOrder" @click='toOrder("all")'>全部订单&gt;</div>
+    			<div class="content">
+	    			<div class="title">我的订单</div>
+	    			<div class="allOrder" @click='toOrder("all")'>全部订单&gt;</div>
+    			</div>
     		</div>
     		<div class="line"></div>
     		<div class="pay-state" >
@@ -134,16 +136,20 @@ export default {
 		background-color: #f5f5f5;
 	}
 	.myorder {
-		width: 690/@fs;
-		margin: 0 auto;
-		color: #656565;
-		font-size: 32/@fs;
-		display: flex;
-		justify-content: space-between;
-		height: 90/@fs;
-		line-height: 90/@fs;
-		.allOrder	 {
-			color: #f26721;
+		width: 100%;
+		background-color: #fff;
+		.content {
+			width: 690/@fs;
+			margin: 0 auto;
+			color: #656565;
+			font-size: 32/@fs;
+			display: flex;
+			justify-content: space-between;
+			height: 90/@fs;
+			line-height: 90/@fs;
+			.allOrder	 {
+				color: #f26721;
+			}
 		}
 	}
 	.pay-state {
@@ -152,6 +158,7 @@ export default {
 		justify-content: sapce-between;
 		text-align: center;
 		padding: 28/@fs 0 22/@fs 0;
+		background-color: #fff;
 		>div {
 			flex:1 0 auto;
 			position: relative;
@@ -175,6 +182,7 @@ export default {
 		}
 	}
 	.fast-enter {
+		background-color: #fff;
 		width: 100%;
 		ul {
 			margin-left: 30/@fs;

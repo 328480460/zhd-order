@@ -43,8 +43,8 @@
 				<div class="classify-item" :class="{current: current == item.type_id}" v-if='classify' v-for='(item, key) in classify' @click='change_classify(item)'>{{item.type_name}}</div>
 			</div>
 			<div class="goods-list" >
-				<div class="goods-item" v-for='item in goods_list'>
-					<div class="goods-img">
+				<div class="goods-item" v-for='item in goods_list' >
+					<div class="goods-img" @click='toGoodDetail(item)'>
 						<img src="./images/goods_07.png">
 					</div>
 					<div class="goods-info">
@@ -55,7 +55,7 @@
 						<div class="standard">{{item.standard}}</div>
 						<div class="add-reduce-car" >
 							<Add_Reduce  :goods='item'></Add_Reduce>
-							<div class="add-car" @click='add_car(item)'>
+							<div class="add-car" @click.stop='add_car(item)'>
 								<i class="icon-buycar" ></i>
 							</div>
 						</div>
@@ -64,47 +64,13 @@
 			</div>
 		</div>
    	</div>
-   	<div class="car-ctrl">
-   		<div class="header">
-	   		<div class="left">
-	   			<div class="car-icon">
-	   				<i class="icon-buycar" @click='toggleList'></i>
-	   				<div class="type-count" v-show='type_count >0 '>{{type_count}}</div>
-	   			</div>
-	   			<div class="total-price">￥{{total_price}}</div>
-	   		</div>
-	   		<div class="accounts" @click='to_confirmorder'>结算</div>
-   		</div>
-   		<transition name='fold'>
-			<div class="content fold-transition" v-show="listShow" v-if='shop_car.length > 0'>
-				<div class="car-head">
-					<div class="title">已选商品</div>
-					<div class="clear-goods" @click='clear_goods'>
-						<img src="./images/delete_icon_03.png">
-						删除所有商品
-					</div>
-				</div>
-				<div class="goods-wrapper">
-					<div class="goods-item" v-for='(item,key) in this.shop_car' :key=key>
-						<div class="goods-name">{{item.goods_name}}</div>
-						<div class="goods-name">￥{{item.price}}</div>
-						<ShopCarCtrl :goods='item' @getCount='getCount' @deleteGoods='deleteGoods'></ShopCarCtrl>
-					</div>
-				</div>
-			</div>
-		</transition>
-   	</div> 
-   	<div class="goods-list-wrapper" v-if='shop_car.length > 0' v-show="listShow" @click='toggleList'>
-	</div>
-	<div class="goods-detail">
-		
-	</div>
+   	<CarCtrl :shop_car='shop_car' @getCount='getCount' @deleteGoods='deleteGoods' @clear_goods='clear_goods'></CarCtrl>
   </div>
 </template>
 
 <script>
 import Add_Reduce from '../../../Common/Add_Reduce/Add_Reduce.vue';
-import ShopCarCtrl from '../../../Common/ShopCarCtrl/ShopCarCtrl.vue';
+import CarCtrl from '../../../Common/CarCtrl/CarCtrl.vue';
 export default {
   name: 'shop',
   created() {
@@ -132,22 +98,6 @@ export default {
   			return this.shop_info.shop_car;
   		}
   		return []
-  	},
-  	total_price () {
-  		if(!this.shop_car) {
-  			return 0;
-  		}
-  		var allPrice = 0;
-  		this.shop_car.forEach((value, index) => {
-  			allPrice += value.price * value.count;
-  		})
-  		return Math.floor(allPrice * 100) / 100;
-  	},
-  	type_count() {
-  		if(!this.shop_car) {
-  			return 0;
-  		}
-  		return this.shop_car.length;
   	}
   },
   methods: {
@@ -178,8 +128,14 @@ export default {
 	  	});
   	},
   	deleteGoods(goods) {
-
   		this.$store.dispatch('shop_delete_goods', {shop_id:this.shop_id,ids:goods.shopping_cart_id +','}).then((res) => {
+	  		this.shop_info = res.data.data;
+	  	}).catch((res) => {
+	  		alert('ERROR');
+	  	});
+  	},
+  	clear_goods(_ids) {
+  		this.$store.dispatch('shop_delete_goods', {shop_id:this.shop_id,ids:_ids}).then((res) => {
 	  		this.shop_info = res.data.data;
 	  	}).catch((res) => {
 	  		alert('ERROR');
@@ -196,7 +152,6 @@ export default {
 	  	});
   	},
   	add_usual() {
-  		// 到后台
   		this.$store.dispatch('shop_add_usual',{shop_id:this.shop_id}).then((res) => {
   			if(res.data.result) {
   				this.shop_info.usually = true;
@@ -205,36 +160,13 @@ export default {
 	  		alert('ERROR');
 	  	});
   	},
-  	toggleList() {
-  		if(!this.shop_car.length) {
-  			return;
-  		}
-  		this.listShow = !this.listShow;
-  	},
-  	clear_goods() {
-  		var _ids = '';
-  		this.shop_car.forEach((value,index) => {
-  			_ids += (value.shopping_cart_id +',');
-  		})
-
-  		this.$store.dispatch('shop_delete_goods', {shop_id:this.shop_id,ids:_ids}).then((res) => {
-	  		this.shop_info = res.data.data;
-	  	}).catch((res) => {
-	  		alert('ERROR');
-	  	});
-  	},
-  	to_confirmorder() {
-  		var _shop_id = this.shop_id
-  		var _submit = {
-  			_shop_id: this.shop_car
-  		}
-  		this.$store.commit('create_current_order', _submit);
-    	this.$router.push({path: '/retailer/confirmOrder'});
+  	toGoodDetail(goods) {
+  		this.$router.push({path:'/retailer/goodsDetail',query: {shop_id: this.shop_id, goods_id:goods.goods_id}})
   	}
   },
   components: {
   	Add_Reduce,
-  	ShopCarCtrl
+  	CarCtrl
   }
 }
 </script>
@@ -421,139 +353,137 @@ export default {
 			}
 		}
 	}
-	.car-ctrl {
-		position: fixed;
-		left: 0;
-		bottom: 0;
-		width: 100%;
-		border-top: 1px solid #e0e0e0;
-		height: 90/@fs;
-		background: #fff;
-		display: flex;
-		justify-content:space-between;
-		align-items:center;
-		z-index: 88;
-		.header {
-			height: 90/@fs;
-			display: flex;
-			justify-content:space-between;
-			align-items:center;
-			background: #fff;
-			.left {
-				margin-left: 30/@fs;
-				.car-icon {
-					display: inline-block;
-					width: 60/@fs;
-					height: 60/@fs;
-					background: #f16721;
-					border-radius: 100%;
-					font-size: 40/@fs;
-					text-align: center;
-					line-height: 64/@fs;
-					position: relative;
-					i:before {
-						color: #fff;
-					}
-					.type-count {
-						position: absolute;
-						right: -16/@fs;
-						top: -5/@fs;
-						font-size: 18/@fs;
-						background: #da2e39;
-						height: 36/@fs;
-						width: 36/@fs;
-						line-height: 38/@fs;
-						border-radius: 50%;
-						color: #fff;
-					}
-				}
-				.total-price {
-					display: inline-block;
-					margin-left:30/@fs;			
-					color: #f16721;
-					font-size: 36/@fs;
-				}
-			}
-			.accounts {
-				width: 150/@fs;
-				background: #f16721;
-				color: #fff;
-				font-size: 30/@fs;
-				line-height: 90/@fs;
-				height: 90/@fs;
-				text-align: center;
-			}
-		}
-		.content {
-			position: absolute;
-			max-height: 480/@fs;
-			background: #fff;
-			top: -1px;
-			left: 0;
-			width: 100%;
-			z-index: -1;
-			&.fold-transition  {
-				transform: translate3d(0,-100%,0);
-			}
-			&.fold-enter {
-				transform: translate3d(0,0,0);
-			}
-			&.fold-enter-to {
-				transition: all .3s linear;
-			}
-			&.fold-leave-to {
-				transition: all .3s linear;
-				transform: translate3d(0,0,0);
-			} 
-			.car-head {
-				height: 80/@fs;
-				line-height: 80/@fs;
-				display: flex;
-				justify-content:space-between;
-				align-items:center;
-				padding: 0 30/@fs;
-				color: #282828;
-				font-size: 32/@fs;
-				.clear-goods {
-					color: #656565;
-					font-size: 30/@fs;
-					img {
-						display: inline-block;
-						width: 27/@fs;
-					}
-				}
-			}
-			.goods-wrapper {
-				max-height: 400/@fs;
-				overflow-y: scroll;
-				overflow-x: hidden;
-				.goods-item {
-					height: 90/@fs;
-					line-height: 90/@fs;
-					display: flex;
-					justify-content:space-between;
-					align-items:center;
-					color: #656565;
-					font-size: 32/@fs;
-					padding: 0 30/@fs;
-					border-top: 1px solid #e0e0e0;
-					.goods-name {
-						width: 380/@fs;
-					}
-				}
-			}
-		}
-	}
-	.goods-list-wrapper {
-		position: fixed;
-		top: 0;
-		left: 0;
-		bottom: 92/@fs;
-		right: 0;
-		background: rgba(0,0,0,.5);
-	}
-	.goods-detail {
-		
-	}
+	// .car-ctrl {
+	// 	position: fixed;
+	// 	left: 0;
+	// 	bottom: 0;
+	// 	width: 100%;
+	// 	border-top: 1px solid #e0e0e0;
+	// 	height: 90/@fs;
+	// 	background: #fff;
+	// 	display: flex;
+	// 	justify-content:space-between;
+	// 	align-items:center;
+	// 	z-index: 88;
+	// 	.header {
+	// 		height: 90/@fs;
+	// 		display: flex;
+	// 		justify-content:space-between;
+	// 		align-items:center;
+	// 		background: #fff;
+	// 		.left {
+	// 			margin-left: 30/@fs;
+	// 			.car-icon {
+	// 				display: inline-block;
+	// 				width: 60/@fs;
+	// 				height: 60/@fs;
+	// 				background: #f16721;
+	// 				border-radius: 100%;
+	// 				font-size: 40/@fs;
+	// 				text-align: center;
+	// 				line-height: 64/@fs;
+	// 				position: relative;
+	// 				i:before {
+	// 					color: #fff;
+	// 				}
+	// 				.type-count {
+	// 					position: absolute;
+	// 					right: -16/@fs;
+	// 					top: -5/@fs;
+	// 					font-size: 18/@fs;
+	// 					background: #da2e39;
+	// 					height: 36/@fs;
+	// 					width: 36/@fs;
+	// 					line-height: 38/@fs;
+	// 					border-radius: 50%;
+	// 					color: #fff;
+	// 				}
+	// 			}
+	// 			.total-price {
+	// 				display: inline-block;
+	// 				margin-left:30/@fs;			
+	// 				color: #f16721;
+	// 				font-size: 36/@fs;
+	// 			}
+	// 		}
+	// 		.accounts {
+	// 			width: 150/@fs;
+	// 			background: #f16721;
+	// 			color: #fff;
+	// 			font-size: 30/@fs;
+	// 			line-height: 90/@fs;
+	// 			height: 90/@fs;
+	// 			text-align: center;
+	// 		}
+	// 	}
+	// 	.content {
+	// 		position: absolute;
+	// 		max-height: 480/@fs;
+	// 		background: #fff;
+	// 		top: -1px;
+	// 		left: 0;
+	// 		width: 100%;
+	// 		z-index: -1;
+	// 		&.fold-transition  {
+	// 			transform: translate3d(0,-100%,0);
+	// 		}
+	// 		&.fold-enter {
+	// 			transform: translate3d(0,0,0);
+	// 		}
+	// 		&.fold-enter-to {
+	// 			transition: all .3s linear;
+	// 		}
+	// 		&.fold-leave-to {
+	// 			transition: all .3s linear;
+	// 			transform: translate3d(0,0,0);
+	// 		} 
+	// 		.car-head {
+	// 			height: 80/@fs;
+	// 			line-height: 80/@fs;
+	// 			display: flex;
+	// 			justify-content:space-between;
+	// 			align-items:center;
+	// 			padding: 0 30/@fs;
+	// 			color: #282828;
+	// 			font-size: 32/@fs;
+	// 			.clear-goods {
+	// 				color: #656565;
+	// 				font-size: 30/@fs;
+	// 				img {
+	// 					display: inline-block;
+	// 					width: 27/@fs;
+	// 				}
+	// 			}
+	// 		}
+	// 		.goods-wrapper {
+	// 			max-height: 400/@fs;
+	// 			overflow-y: scroll;
+	// 			overflow-x: hidden;
+	// 			.goods-item {
+	// 				height: 90/@fs;
+	// 				line-height: 90/@fs;
+	// 				display: flex;
+	// 				justify-content:space-between;
+	// 				align-items:center;
+	// 				color: #656565;
+	// 				font-size: 32/@fs;
+	// 				padding: 0 30/@fs;
+	// 				border-top: 1px solid #e0e0e0;
+	// 				.goods-name {
+	// 					width: 380/@fs;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// .goods-list-wrapper {
+	// 	position: fixed;
+	// 	top: 0;
+	// 	left: 0;
+	// 	bottom: 92/@fs;
+	// 	right: 0;
+	// 	background: rgba(0,0,0,.5);
+	// }
+
 	
 </style>

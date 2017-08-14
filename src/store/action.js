@@ -1,41 +1,45 @@
 import axios from 'axios';
+var baseUrl = 'http://192.168.0.14:9999/order';
+// var baseUrl = '';
 // 零售商 首页接口
-var retailer_path = 'http://192.168.0.14:9999/order/api/retailer/index';
+var retailer_path = baseUrl + '/api/retailer/index';
 // 零售商 搜索页面接口
-var retailer_search_path = 'http://192.168.0.14:9999/order/api/retailer/searchInfo';
+var retailer_search_path = baseUrl + '/api/retailer/searchInfo';
 
 // 零售商 购物车添加商品接口地址
-var car_path = 'http://192.168.0.14:9999/order/api/retailer/car';
+var car_path = baseUrl + '/api/retailer/car';
 // 零售商 购物车信息接口地址
-var add_goods_path = 'http://192.168.0.14:9999/order/api/retailer/add_goods';
+var add_goods_path = baseUrl + '/api/retailer/add_goods';
 // 零售商 购物车删除商品接口地址
-var delete_goods_path = 'http://192.168.0.14:9999/order/api/retailer/delete_goods';
+var delete_goods_path = baseUrl + '/api/retailer/delete_goods';
 // 零售商 购物车更新商品接口地址
-var update_goods_path = 'http://192.168.0.14:9999/order/api/retailer/update_goods';
+var update_goods_path = baseUrl + '/api/retailer/update_goods';
 
 // 零售商 提交订单接口地址
-var submit_order_path = 'http://192.168.0.14:9999/order/api/retailer/submit_order';
+var submit_order_path = baseUrl + '/api/retailer/submit_order';
 
 // 零售商 查看订单接口地址
-var order_path = 'http://192.168.0.14:9999/order/api/retailer/order';
+var order_path = baseUrl + '/api/retailer/order';
 // 零售商 操作查看订单接口地址
-var order_operation_path = 'http://192.168.0.14:9999/order/api/retailer/order_operation'
+var order_operation_path = baseUrl + '/api/retailer/order_operation'
 
 // 零售商shop店铺信息接口地址
-var shop_info_path = 'http://192.168.0.14:9999/order/api/retailer/shop_info';
+var shop_info_path = baseUrl + '/api/retailer/shop_info';
 // 零售商shop店铺信息接口地址
-var get_goods_list_path = 'http://192.168.0.14:9999/order/api/retailer/get_goods_list';
+var get_goods_list_path = baseUrl + '/api/retailer/get_goods_list';
 // 零售商 添加商铺到常用接口地址
-var shop_add_usual_path = 'http://192.168.0.14:9999/order/api/retailer/shop_add_usual';
+var shop_add_usual_path = baseUrl + '/api/retailer/shop_add_usual';
 // 零售商shop店铺购物车 添加商品接口地址
-var shop_add_goods_path = 'http://192.168.0.14:9999/order/api/retailer/shop_add_goods';
+var shop_add_goods_path = baseUrl + '/api/retailer/shop_add_goods';
 // 零售商shop店铺购物车 删除商品接口地址
-var shop_delete_goods_path = 'http://192.168.0.14:9999/order/api/retailer/shop_delete_goods';
+var shop_delete_goods_path = baseUrl + '/api/retailer/shop_delete_goods';
 // 零售商shop店铺购物车 更新商品接口地址
-var shop_update_goods_path = 'http://192.168.0.14:9999/order/api/retailer/shop_update_goods';
+var shop_update_goods_path = baseUrl + '/api/retailer/shop_update_goods';
+// 零售商shop商品详情 接口地址
+var shop_goods_info = baseUrl + '/api/retailer/shop_goods_info';
 
 // 登录接口
-var login_path ='http://192.168.0.14:9999/order/loginApi/login';
+var login_path =baseUrl + '/loginApi/login';
 
 axios.defaults.withCredentials = true;
 export default {
@@ -84,7 +88,10 @@ export default {
     shop_update_goods({ commit }, value) {
         return axios.post(shop_update_goods_path, value);
     },
+    shop_goods_info({ commit }, value) {
+        return axios.post(shop_goods_info, value);
+    },
     login({ commit }, value) {
-        return axios.post(login_path, {params:value});
+        return axios.post(login_path, value);
     }
 }

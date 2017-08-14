@@ -64,7 +64,7 @@ export default {
 				console.log(this.userInfo.USERTYPE);
 				if(this.userInfo.USERTYPE == 1003) {
 					// 零售商
-					// this.$router.push({path:'/retailer/index'});
+					this.$router.push({path:'/retailer/index'});
 				}
 
 			}

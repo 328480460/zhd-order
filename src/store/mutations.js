@@ -1,5 +1,9 @@
 export default {
-	
+	// 更新登录状态
+	updata_login_status(state, status) {
+		state.isLogin = status;
+	},
+
 	// 生成当前订单
 	create_current_order(state,obj) {
 		state.current_order = obj;
@@ -9,5 +13,6 @@ export default {
 	clear_current_order(state) {
 		state.current_order = null;
 	}
+
 
 }

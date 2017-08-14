@@ -41,6 +41,10 @@ export default new Router({
 		name: 'Shop',
 		component: Retailer.Shop
 	}, {
+		path: '/retailer/goodsDetail',
+		name: 'GoodsDetail',
+		component: Retailer.GoodsDetail
+	}, {
 		path: '/retailer/settlement',
 		name: 'Settlement',
 		component: Retailer.Settlement

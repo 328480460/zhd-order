@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-    	<transition name="fade">
+    	<transition name="fade" >
         	<router-view></router-view>
         </transition>
     </div>
@@ -20,13 +20,13 @@ body {
     	opacity: 0.5;
     }
     .fade-enter-to {
-    	transition: all .5s linear;
+    	transition: all .3s linear;
     }
     .fade-leave {
-    	/*transition: all .5s linear;*/
+    	transition: all .3s linear;
     }
     .fade-leave-to {
-    	/*transform: translateX(-100%);*/
+    	/*transform: translateX(100%);*/
     	opacity: 0.5;
     }
 }

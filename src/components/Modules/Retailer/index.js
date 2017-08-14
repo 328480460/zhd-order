@@ -8,6 +8,7 @@ import Shop from './Shop/Shop.vue';
 import Settlement from './Settlement/Settlement.vue';
 import SearchBox from './SearchBox/SearchBox.vue';
 import ConfirmOrder from './ConfirmOrder/ConfirmOrder.vue';
+import GoodsDetail from './GoodsDetail/GoodsDetail.vue';
 
 export default {
 	Buycar,
@@ -19,5 +20,6 @@ export default {
 	Shop,
 	Settlement,
 	SearchBox,
-	ConfirmOrder
+	ConfirmOrder,
+	GoodsDetail
 }
