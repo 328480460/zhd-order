@@ -179,7 +179,7 @@ export default {
   			if(text == '再次购买') {
   				this.$router.push({path:'/retailer/buycar'})
   			}
-	  		this.order = res.data.data;
+	  		// this.order = res.data.data;
 
 	  	}).catch((res) => {
 	  		alert('ERROR');

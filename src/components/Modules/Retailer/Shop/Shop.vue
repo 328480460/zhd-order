@@ -55,7 +55,7 @@
 						<div class="standard">{{item.standard}}</div>
 						<div class="add-reduce-car" >
 							<Add_Reduce  :goods='item'></Add_Reduce>
-							<div class="add-car" @click.stop='add_car(item)'>
+							<div class="add-car" @click.stop='add_car(item, $event)' ref='car_icon'>
 								<i class="icon-buycar" ></i>
 							</div>
 						</div>
@@ -64,7 +64,7 @@
 			</div>
 		</div>
    	</div>
-   	<CarCtrl :shop_car='shop_car' @getCount='getCount' @deleteGoods='deleteGoods' @clear_goods='clear_goods'></CarCtrl>
+   	<CarCtrl :shop_car='shop_car' @getCount='getCount' @deleteGoods='deleteGoods' @clear_goods='clear_goods' ref='carCtrl'></CarCtrl>
   </div>
 </template>
 
@@ -89,7 +89,8 @@ export default {
      	goods_list: '',
      	current: 'recommend',
      	listShow: false,
-     	shop_id: this.$route.query.shop_id
+     	shop_id: this.$route.query.shop_id,
+     	postion_ele: '',
     }
   },
   computed: {
@@ -141,7 +142,8 @@ export default {
 	  		alert('ERROR');
 	  	});
   	},
-  	add_car(goods) {
+  	add_car(goods,event) {
+  		this.dropBall(event);
 		if(!goods.count) {
   			goods.count = 1;
   		}
@@ -161,7 +163,12 @@ export default {
 	  	});
   	},
   	toGoodDetail(goods) {
+  		this.$store.commit('create_goods_detail', goods)
   		this.$router.push({path:'/retailer/goodsDetail',query: {shop_id: this.shop_id, goods_id:goods.goods_id}})
+
+  	},
+  	dropBall(event) {
+  		this.$refs.carCtrl.drop(event.currentTarget);
   	}
   },
   components: {
@@ -344,6 +351,7 @@ export default {
 							text-align: center;
 							line-height: 54/@fs;
 							vertical-align: top;
+							
 							i:before{
 								color: #fff;
 							}
@@ -353,137 +361,6 @@ export default {
 			}
 		}
 	}
-	// .car-ctrl {
-	// 	position: fixed;
-	// 	left: 0;
-	// 	bottom: 0;
-	// 	width: 100%;
-	// 	border-top: 1px solid #e0e0e0;
-	// 	height: 90/@fs;
-	// 	background: #fff;
-	// 	display: flex;
-	// 	justify-content:space-between;
-	// 	align-items:center;
-	// 	z-index: 88;
-	// 	.header {
-	// 		height: 90/@fs;
-	// 		display: flex;
-	// 		justify-content:space-between;
-	// 		align-items:center;
-	// 		background: #fff;
-	// 		.left {
-	// 			margin-left: 30/@fs;
-	// 			.car-icon {
-	// 				display: inline-block;
-	// 				width: 60/@fs;
-	// 				height: 60/@fs;
-	// 				background: #f16721;
-	// 				border-radius: 100%;
-	// 				font-size: 40/@fs;
-	// 				text-align: center;
-	// 				line-height: 64/@fs;
-	// 				position: relative;
-	// 				i:before {
-	// 					color: #fff;
-	// 				}
-	// 				.type-count {
-	// 					position: absolute;
-	// 					right: -16/@fs;
-	// 					top: -5/@fs;
-	// 					font-size: 18/@fs;
-	// 					background: #da2e39;
-	// 					height: 36/@fs;
-	// 					width: 36/@fs;
-	// 					line-height: 38/@fs;
-	// 					border-radius: 50%;
-	// 					color: #fff;
-	// 				}
-	// 			}
-	// 			.total-price {
-	// 				display: inline-block;
-	// 				margin-left:30/@fs;			
-	// 				color: #f16721;
-	// 				font-size: 36/@fs;
-	// 			}
-	// 		}
-	// 		.accounts {
-	// 			width: 150/@fs;
-	// 			background: #f16721;
-	// 			color: #fff;
-	// 			font-size: 30/@fs;
-	// 			line-height: 90/@fs;
-	// 			height: 90/@fs;
-	// 			text-align: center;
-	// 		}
-	// 	}
-	// 	.content {
-	// 		position: absolute;
-	// 		max-height: 480/@fs;
-	// 		background: #fff;
-	// 		top: -1px;
-	// 		left: 0;
-	// 		width: 100%;
-	// 		z-index: -1;
-	// 		&.fold-transition  {
-	// 			transform: translate3d(0,-100%,0);
-	// 		}
-	// 		&.fold-enter {
-	// 			transform: translate3d(0,0,0);
-	// 		}
-	// 		&.fold-enter-to {
-	// 			transition: all .3s linear;
-	// 		}
-	// 		&.fold-leave-to {
-	// 			transition: all .3s linear;
-	// 			transform: translate3d(0,0,0);
-	// 		} 
-	// 		.car-head {
-	// 			height: 80/@fs;
-	// 			line-height: 80/@fs;
-	// 			display: flex;
-	// 			justify-content:space-between;
-	// 			align-items:center;
-	// 			padding: 0 30/@fs;
-	// 			color: #282828;
-	// 			font-size: 32/@fs;
-	// 			.clear-goods {
-	// 				color: #656565;
-	// 				font-size: 30/@fs;
-	// 				img {
-	// 					display: inline-block;
-	// 					width: 27/@fs;
-	// 				}
-	// 			}
-	// 		}
-	// 		.goods-wrapper {
-	// 			max-height: 400/@fs;
-	// 			overflow-y: scroll;
-	// 			overflow-x: hidden;
-	// 			.goods-item {
-	// 				height: 90/@fs;
-	// 				line-height: 90/@fs;
-	// 				display: flex;
-	// 				justify-content:space-between;
-	// 				align-items:center;
-	// 				color: #656565;
-	// 				font-size: 32/@fs;
-	// 				padding: 0 30/@fs;
-	// 				border-top: 1px solid #e0e0e0;
-	// 				.goods-name {
-	// 					width: 380/@fs;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// .goods-list-wrapper {
-	// 	position: fixed;
-	// 	top: 0;
-	// 	left: 0;
-	// 	bottom: 92/@fs;
-	// 	right: 0;
-	// 	background: rgba(0,0,0,.5);
-	// }
 
 	
 </style>

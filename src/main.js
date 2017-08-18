@@ -14,6 +14,16 @@ Vue.use(ToastPlugin)
 
 import store from './store/store.js';
 
+import util from './assets/js/util.js';
+
+router.beforeEach((to, from, next) => {
+	if(!util.getCookie('userId') && to.path !== '/login') {
+		next({path:'/login'});
+	} 
+    next();
+
+})
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

@@ -19,7 +19,7 @@
 			</p>
 			<div class="list" @touchstart='computeWidth'>
 				<ul ref='market_list'>
-					<li v-for='(item,key) in info.market_recommend' :key=key>{{item.market_name}}</li>
+					<li v-for='(item,key) in info.market_recommend' :key=key @click='toMarket(item)'>{{item.market_name}}</li>
 				</ul>
 			</div>
 		</div>
@@ -42,7 +42,7 @@
 		<div class="goods-recommend">
 			<div class="title">商品推荐</div>
 			<ul>
-				<li v-for='(item,key) in info.goods_recommend' :key=key>
+				<li v-for='(item,key) in info.goods_recommend' :key=key @click='toGoodsDetail(item)'>
 					<img src="./images/goods_03.png">
 					<div class="goods-info">
 						<div class="name">{{item.goods_name}}</div>
@@ -56,7 +56,7 @@
 		<div class="line"></div>
 		<div class="nearby">
 			<div class="title">附近商家</div>
-			<div class="info" >
+			<div class="info"  @click='toMarket(info.nearby)'>
 				<img src="./images/nearby_03.png">
 				<div>
 					<p v-if='info.nearby'>{{info.nearby.market_name}}</p>
@@ -76,9 +76,9 @@ export default {
   name: 'index',
   created() {
   	this.$store.dispatch('retailer','').then((res) => {
-  		console.log(res);
 		if(res.data.result) {
   			this.info = res.data.data;
+  			console.log(this.info);
   		}
   	}).catch((res) => {
   		alert('ERROR');
@@ -104,7 +104,7 @@ export default {
 			width += ele.offsetWidth;
 		})
 		width += (margin_right * length + 10);
-		console.log(width);
+		// console.log(width);
 		this.$refs.market_list.style.width = width + 'px';
   	},
   	toSearchBox() {
@@ -115,6 +115,13 @@ export default {
   	},
   	toUsualSop() {
   		alert('去常用店铺')
+  	},
+  	toGoodsDetail(goods) {
+  		this.$store.commit('create_goods_detail', goods);
+  		this.$router.push({path:'/retailer/goodsDetail',query:{shop_id: goods.shop_id, goods_id: goods.goods_id}})
+  	},
+  	toMarket(market) {
+  		this.$router.push({path: '/retailer/market', query: {market_id: market.market_id}})
   	}
   },
   components: {

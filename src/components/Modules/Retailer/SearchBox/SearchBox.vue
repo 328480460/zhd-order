@@ -42,13 +42,13 @@
 					<ul>
 						<li v-for="item in have_buy" class="goods-item">
 							<div class="head">
-								<div class="market-name">
+								<div class="market-name" @click='toMarket(item)'>
 									{{item.market_name}}
 								</div>
 								<img src="./images/icon_right_arrow_03.png">
 							</div>
 							<div class="cont">
-								<img src="./images/goods_07.png">
+								<img src="./images/goods_07.png" @click='toGoodsDetail(item)'>
 								<div class="goods-info">
 									<p class="goods-name">{{item.goods_name}}</p>
 									<p class="price-standard">
@@ -72,13 +72,13 @@
 					<ul class="goods-list" ref='goodsList'>
 						<li v-for="item in first_buy" class="goods-item">
 							<div class="head">
-								<div class="market-name">
+								<div class="market-name" @click='toMarket(item)'>
 									{{item.market_name}}
 								</div>
 								<img src="./images/icon_right_arrow_03.png">
 							</div>
 							<div class="cont">
-								<img src="./images/goods_07.png">
+								<img src="./images/goods_07.png"  @click='toGoodsDetail(item)'>
 								<div class="goods-info">
 									<p class="goods-name">{{item.goods_name}}</p>
 									<p class="price-standard">
@@ -300,7 +300,16 @@ export default {
 	},
 	toShop(item) {
 		this.$router.push({path:'/retailer/shop',query:{shop_id:item.shop_id}});
-	}	
+	},
+	toGoodsDetail(goods){
+		this.$store.commit('create_goods_detail', goods)
+		this.$router.push({path:'/retailer/goodsDetail', query:{shop_id:goods.shop_id,goods_id: goods.goods_id}});
+	},
+	toMarket(goods) {
+		this.$router.push({path:'/retailer/market', query: {
+			market_id: goods.market_id
+		}})
+	}
   },
   watch: {
   	key_word(newVal, oldVal) {

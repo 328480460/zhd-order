@@ -6,7 +6,7 @@
 				<img src="./images/back_icon.png" @click='back'>
 			</div>
 			<div class="title">商品页详情</div>
-			<div class="shop">
+			<div class="shop" @click='goShop'>
 				商铺
 			</div>
 		</div>
@@ -17,19 +17,19 @@
 	<div class="goods-info">
 		<div class="content">
 			<div class="left">
-				<div class="name">{{goods_info.goods_name}}</div>
-				<div class="price">￥{{goods_info.price}}</div>
+				<div class="name">{{goods_detail.goods_name}}</div>
+				<div class="price">￥{{goods_detail.price}}</div>
 			</div>
 			<div class="right">
 				<div class="top">
-					<div class="standard">规格：{{goods_info.standard}}</div>
-					<div class="stock">库存：{{goods_info.stock}}</div>
+					<div class="standard">规格：{{goods_detail.standard}}</div>
+					<div class="stock">库存：{{goods_detail.stock}}</div>
 				</div>
 				<div class="bottom">
 					<div class="add-reduce">
-						<Add_Reduce  :goods='goods_info'></Add_Reduce>
+						<Add_Reduce  :goods='goods_detail'></Add_Reduce>
 					</div>
-					<div class="add-car" @click.stop='add_car(goods_info)'>
+					<div class="add-car" @click.stop='add_car(goods_detail)'>
 						<i class="icon-buycar" ></i>
 					</div>
 				</div>
@@ -38,7 +38,7 @@
 	</div>
 	<div class="market">
 		<div class="content">
-			<span class="market-name">{{goods_info.market_name}}</span>
+			<span class="market-name">{{goods_detail.market_name}}</span>
 			<img src="./images/icon_right_arrow_03.png">
 		</div>
 	</div>
@@ -49,23 +49,22 @@
 		<table>
 			<tr>
 				<td>品名</td>
-				<td>{{goods_info.goods_name}}</td>
+				<td>{{goods_detail.goods_name}}</td>
 			</tr>
 			<tr>
 				<td>规格</td>
-				<td>{{goods_info.standard}}</td>
+				<td>{{goods_detail.standard}}</td>
 			</tr>
 			<tr>
 				<td>产地</td>
-				<td>{{goods_info.area_name}}</td>
+				<td>{{goods_detail.area_name}}</td>
 			</tr>
 		</table>
 	</div>
 	<div class="description">
 		<div class="title">商品详情</div>
 		<div class="text">
-			{{goods_info.goods_detailed}}
-			拉拉拉拉啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦
+			{{goods_detail.goods_detailed}}
 		</div>
 	</div>
    	<CarCtrl :shop_car='shop_car' @getCount='getCount' @deleteGoods='deleteGoods' @clear_goods='clear_goods'></CarCtrl>
@@ -78,30 +77,25 @@ import CarCtrl from '../../../Common/CarCtrl/CarCtrl.vue';
 export default {
   name: 'goodsDetail',
   created() {
-  	this.$store.dispatch('shop_goods_info',{goods_id:this.goods_id,shop_id:this.shop_id}).then((res) => {
-  		this.goods_detail = res.data.data;
+  	this.$store.dispatch('shop_info',{shop_id:this.shop_id}).then((res) => {
+  		this.shop_info = res.data.data;
   	}).catch((res) => {
-  		alert('ERROR');
+  		alert('ERROR');	
   	})
   },
   data () {
   	return {
-     	goods_detail: '',
+     	shop_info: '',
+     	goods_detail: this.$store.state.goods_detail,
      	listShow: false,
      	shop_id: this.$route.query.shop_id,
      	goods_id: this.$route.query.goods_id,
     }
   },
   computed: {
-  	goods_info() {
-  		if(this.goods_detail) {
-  			return this.goods_detail.goods_info;
-  		}
-  		return {}
-  	},
   	shop_car() {
-  		if(this.goods_detail) {
-  			return this.goods_detail.shop_car;
+  		if(this.shop_info) {
+  			return this.shop_info.shop_car;
   		}
   		return []
   	}
@@ -109,6 +103,9 @@ export default {
   methods: {
   	back() {
   		this.$router.go(-1);
+  	},
+  	goShop() {
+  		this.$router.push({path:'/retailer/shop',query:{shop_id:this.shop_id}})
   	},
   	getCount(goods) {
   		console.log(goods);
@@ -119,14 +116,14 @@ export default {
   	},
   	deleteGoods(goods) {
   		this.$store.dispatch('shop_delete_goods', {shop_id:this.shop_id,ids:goods.shopping_cart_id +','}).then((res) => {
-	  		this.goods_detail = res.data.data;
+	  		this.shop_info = res.data.data;
 	  	}).catch((res) => {
 	  		alert('ERROR');
 	  	});
   	},
   	clear_goods(_ids) {
   		this.$store.dispatch('shop_delete_goods', {shop_id:this.shop_id,ids:_ids}).then((res) => {
-	  		this.goods_detail = res.data.data;
+	  		this.shop_info = res.data.data;
 	  	}).catch((res) => {
 	  		alert('ERROR');
 	  	});
@@ -136,7 +133,7 @@ export default {
   			goods.count = 1;
   		}
   		this.$store.dispatch('shop_add_goods', {shop_id:this.shop_id,goods_info:goods}).then((res) => {
-	  		this.goods_detail = res.data.data;
+	  		this.shop_info = res.data.data;
 	  	}).catch((res) => {
 	  		alert('ERROR');
 	  	});

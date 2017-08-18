@@ -22,6 +22,14 @@
 import util from '../../assets/js/util.js';
 export default {
   name: 'login',
+  created() {
+  	if(util.getCookie('remoberChecked')) {
+	  	this.userName = util.getCookie('userName') ? util.getCookie('userName'): '';
+	  	this.userPassword = util.getCookie('userName') ? util.getCookie('userPassword'): '';
+	  	this.remoberChecked = util.getCookie('remoberChecked');
+  	}
+
+  },
   data () {
     return {
       	userName: '',
@@ -52,13 +60,20 @@ export default {
 			if(res.data[0].result) {
 				this.userInfo = res.data[0].data;
 				if(this.remoberChecked) {
-					util.setCookie('userId',this.userInfo.USERID,30)
-					util.setCookie('userType',this.userInfo.USERTYPE,30)
-					util.setCookie('nodeId',this.userInfo.NODE_ID,30)
+					util.setCookie('userId',this.userInfo.USERID,30);
+					util.setCookie('userType',this.userInfo.USERTYPE,30);
+					util.setCookie('nodeId',this.userInfo.NODE_ID,30);
+					util.setCookie('userName', this.userName,30);
+					util.setCookie('userPassword', this.userPassword,30);
+					util.setCookie('remoberChecked', this.remoberChecked,30);
 				}else {
 					util.setCookie('userId',this.userInfo.USERID);
 					util.setCookie('userType',this.userInfo.USERTYPE);
 					util.setCookie('nodeId',this.userInfo.NODE_ID);
+					util.setCookie('userName', this.userName);
+					util.setCookie('userPassword', this.userPassword);
+					util.setCookie('remoberChecked', this.remoberChecked);
+
 				}
 
 				console.log(this.userInfo.USERTYPE);
@@ -67,6 +82,8 @@ export default {
 					this.$router.push({path:'/retailer/index'});
 				}
 
+			} else {
+				alert(res.data[0].message);
 			}
   		}).catch((res) => {
   			alert('登录失败');

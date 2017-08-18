@@ -40,13 +40,28 @@ var setCookie = function(c_name, value, expiredays) {　　　　
   document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());　　
 }
 
+var getCookie = function(cName) {
+  var cookieString = decodeURI(document.cookie);
+  var cookieArray = cookieString.split("; ");
+  for (var i = 0; i < cookieArray.length; i++) {
+    var cookieNum = cookieArray[i].split("=");
+    var cookieName = cookieNum[0];
+    var cookieValue = cookieNum[1];
+
+    if (cookieName == cName) {
+      return cookieValue;
+    }
+  }
+  return false;
+}
 var removeCookie = function(key) {
-    setCookie(key, '', -1);//这里只需要把Cookie保质期退回一天便可以删除
+  setCookie(key, '', -1); //这里只需要把Cookie保质期退回一天便可以删除
 }
 export default {
   deepCopy,
   computedPrice,
   empty_flg,
   setCookie,
-  removeCookie
+  removeCookie,
+  getCookie
 }

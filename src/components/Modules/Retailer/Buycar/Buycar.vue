@@ -69,7 +69,6 @@ export default {
   name: 'shopcar',
   created() {
   	this.$store.dispatch('car').then((res) => {
-  		console.log(res.data);
   		if(res.data.result) {
 			this.shop_info = res.data.data;
   		}

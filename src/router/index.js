@@ -1,7 +1,8 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Login from '@/components/Login/Login.vue'
-import Retailer from '@/components/Modules/Retailer/index.js'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Login from '@/components/Login/Login.vue';
+import Retailer from '@/components/Modules/Retailer/index.js';
+import WholeSaler from '@/components/Modules/Wholesaler/index.js';
 // console.log(Retailer);
 Vue.use(Router)
 
@@ -60,5 +61,9 @@ export default new Router({
 		path: '/retailer/confirmOrder',
 		name: 'ConfirmOrder',
 		component: Retailer.ConfirmOrder
+	},{
+		path: '/wholesaler/order',
+		name: 'Order',
+		component: WholeSaler.Order
 	}]
 })

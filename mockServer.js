@@ -2,6 +2,7 @@ var mockData = require('./mockData.js');
 var interface = function(express) {
 	var apiRoutes = express.Router();
 	var retailer = mockData.retailer;
+	var wholesaler = mockData.wholesaler;
 	var car = retailer.car_info;
 	apiRoutes.post('/retailer/index', (req, res) => {
 		res.json({
@@ -134,6 +135,21 @@ var interface = function(express) {
 		})
 	});
 
+	// market信息接口
+	apiRoutes.post('/retailer/market', (req, res) => {
+		res.json({
+			result: true,
+			data: retailer.market_info
+		})
+	});
+
+	// market信息接口
+	apiRoutes.post('/wholesaler/order', (req, res) => {
+		res.json({
+			result: true,
+			data: wholesaler.order_list
+		})
+	});
 
 
 

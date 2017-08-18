@@ -73,7 +73,6 @@ export default {
   name: 'my',
   created() {
   	this.$store.dispatch('retailer').then((res) => {
-  		console.log(res);
 		if(res.data.result) {
   			this.info = res.data.data;
   		}	

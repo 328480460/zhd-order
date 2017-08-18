@@ -12,7 +12,10 @@ export default {
 	// 清空当前订单
 	clear_current_order(state) {
 		state.current_order = null;
+	},
+
+	// 生成goods详情
+	create_goods_detail(state,goods) {
+		state.goods_detail = goods;
 	}
-
-
 }
