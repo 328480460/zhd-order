@@ -1,7 +1,7 @@
 <template>
     <div id="app">
     	<transition name="fade" >
-            <keep-alive :include="/searchbox/">
+            <keep-alive :include="['searchbox', 'wholesalerorder']">
         	   <router-view></router-view>
             </keep-alive>  
         </transition>
@@ -9,7 +9,7 @@
 </template>
 <script>
 export default {
-    name: 'app'
+    name: 'app',
 }
 </script>
 <style  lang='less'>

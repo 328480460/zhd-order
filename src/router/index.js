@@ -65,5 +65,13 @@ export default new Router({
 		path: '/wholesaler/order',
 		name: 'Order',
 		component: WholeSaler.Order
+	},{
+		path: '/wholesaler/editOrder',
+		name: 'EditOrder',
+		component: WholeSaler.EditOrder
+	},{
+		path: '/wholesaler/orderDetail',
+		name: 'OrderDetail',
+		component: WholeSaler.OrderDetail
 	}]
 })

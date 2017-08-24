@@ -11,7 +11,7 @@ export default {
   name: 'add_reduce',
   data() {
   	return {
-  		count: this.goods.count || 1
+  		count: parseInt(this.goods.count) || 1
   	}
   },
   props:{

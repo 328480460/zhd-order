@@ -1,10 +1,10 @@
 var mockData = require('./mockData.js');
 var interface = function(express) {
 	var apiRoutes = express.Router();
-	var retailer = mockData.retailer;
+	// var retailer = mockData.retailer;
 	var wholesaler = mockData.wholesaler;
-	var car = retailer.car_info;
-	apiRoutes.post('/retailer/index', (req, res) => {
+	// var car = retailer.car_info;
+/*	apiRoutes.post('/retailer/index', (req, res) => {
 		res.json({
 			result: true,
 			data: retailer
@@ -141,7 +141,7 @@ var interface = function(express) {
 			result: true,
 			data: retailer.market_info
 		})
-	});
+	});*/
 
 	// market信息接口
 	apiRoutes.post('/wholesaler/order', (req, res) => {
@@ -158,7 +158,7 @@ var interface = function(express) {
 }
 
 
-// 向购物车中添加单个商品
+/*// 向购物车中添加单个商品
 function add_shop_car(car, goods) {
 	var _goods = goods;
 	if (!car[goods.shop_id]) {
@@ -221,7 +221,7 @@ function updata_shop_car_count(car, goods) {
 			value.count = _goods.count;
 		}
 	});
-}
+}*/
 
 
 module.exports.interface = interface;

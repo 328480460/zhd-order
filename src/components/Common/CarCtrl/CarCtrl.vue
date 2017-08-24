@@ -125,7 +125,6 @@ export default {
 
   	drop(el) { 
       //触发一次事件就会将所有小球进行遍历
-      	console.log(this.balls)
         for (let i = 0; i < this.balls.length; i++) {
           if (!this.balls[i].show) { //将true的小球放到dropBalls
             this.balls[i].el = el; //设置小球的el属性为一个dom对象
@@ -178,6 +177,13 @@ export default {
 	      el.style.display = 'none'; //隐藏小球
 	    }
 	  }
+  },
+  watch: {
+  	shop_car(newVal, oldVal) {
+  		if(newVal.length == 0) {
+  			this.listShow = false;
+  		}
+  	}
   },
   components: {
   	ShopCarCtrl
@@ -256,7 +262,7 @@ export default {
 			position: absolute;
 			max-height: 480/@fs;
 			background: #fff;
-			top: -1px;
+			top: 0;
 			left: 0;
 			width: 100%;
 			z-index: -1;
@@ -330,13 +336,13 @@ export default {
 	        left: 46/@fs;
 	        bottom: 34/@fs;
 	        z-index:999;
-	        transition: all .6s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+	        transition: all .5s cubic-bezier(0.49, -0.29, 0.75, 0.41);
 	        .inner {
 	              width: 30/@fs;
 		          height: 30/@fs;
 		          border-radius: 50%;
 		          background: #e8440c;
-		          transition: all .6s linear;
+		          transition: all .5s linear;
 	        }
 		}
 	}

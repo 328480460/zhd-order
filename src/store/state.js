@@ -6,6 +6,12 @@ export default {
 	current_order: null,
 
 	// 当前goods详情
-	goods_detail: null
+	goods_detail: null,
+
+	//批发商order_detail 
+	wholesaler_order_detail: null,
+
+	//批发商order_list
+	wholesaler_order_list: null
 
 }

@@ -62,5 +62,4 @@ var wholesaler = {
 
 	}]
 }
-module.exports.retailer = retailer;
 module.exports.wholesaler = wholesaler;

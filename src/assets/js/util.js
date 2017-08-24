@@ -1,5 +1,6 @@
 var deepCopy = function(source) {
-  var result = {};
+  var result = Array.isArray(source) ? [] : {};
+  
   for (var key in source) {
     result[key] = typeof source[key] === 'object' ? deepCopy(source[key]) : source[key];
   }
@@ -57,6 +58,7 @@ var getCookie = function(cName) {
 var removeCookie = function(key) {
   setCookie(key, '', -1); //这里只需要把Cookie保质期退回一天便可以删除
 }
+
 export default {
   deepCopy,
   computedPrice,

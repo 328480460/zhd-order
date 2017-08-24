@@ -1,37 +1,42 @@
 <template>
-  <div class="order">
+  <div class="order" @click='close_pay_list'>
 		<div class="header">
 			<div class="content">
 				<div class="back">
 					<img src="./images/back_icon.png" @click='goBack'>
 				</div>
-				<div class="title">订单管理</div>
+				<div class="title" @click.stop='show_pay_list'>{{pay_way_current.text}}
+				<img src="./images/back_icon.png" class="icon">	
+				</div>
 				<div class="search">
 					<img src="./images/search_icon.png">
 				</div>
 			</div>
+			<div class="pay-way" v-show='pay_show'>
+				<div class="pay-item" v-for='item in pay_way' @click.stop='change_pay(item)'>{{item.text}}</div>
+			</div>
 		</div>
-		<form >
+		<form  @submit.prevent='serach_order'>
 			<div class="search-wrapper">
 				<div class="search">
 					<img src="./images/icon-search_03.png">
-					<input type="search" name="search" placeholder="订单号、零售商账号" v-model='key_word'>
+					<input type="search" name="search" placeholder="订单号、零售商账号" v-model='key_word' >
 				</div>
 			</div>
 		</form>
 		<div class="state-nav">
 			<ul>
-				<li v-for="(item,key) in order_state" :key=key  :class="{active: order_state_current == item.state}">{{item.text}}</li>
+				<li v-for="(item,key) in order_state" :key=key  :class="{active: order_state_current == item.state}" @click='change_state(item)'>{{item.text}}</li>
 			</ul>
 		</div>
-		<div class="order-list" ref='order_list'>
-			<div class="order-item" v-for='(item, key) in order' :key=key >
+		<div class="order-list" ref='order_list' @scroll='scroll'>
+			<div class="order-item" v-for='(item, key) in order_compute' :key=key @click='toOrderDetail(item)'>
 				<div class="order-head">
 					<div class="retailer-name">{{item.retailer_name}}</div>
 					<div class="state">{{item.state}}</div>
 				</div>
 				<div class="goods-list">
-					<div class="goods-item" v-for='goods in item.goods_list'>
+					<div class="goods-item" v-for='goods in item.goodsList'>
 						<div class="left">
 							<img src="./images/goods_03.png">
 							<div class="goods-info">
@@ -49,8 +54,11 @@
 					<div class="pay-state">{{item.pay_state}}</div>
 					<div class="all-price">
 						<span class="text">应收款:</span>
-						<span class="count">￥{{item.all_price}}</span>
+						<span class="count">￥{{item.disbursements}}</span>
 					</div>
+				</div>
+				<div class="opration">
+					<div class="btn" :class='{cancle: btn == "取消订单" }' v-for='btn in item.btnList' @click.stop='opration(btn, item)'>{{btn}}</div>
 				</div>
 			</div>
 		</div>
@@ -59,24 +67,110 @@
 
 <script>
 export default {
-  name: 'order',
+  name: 'wholesalerorder',
   created() {
-  	this.render();
-  },
-  mounted() {
-  	var order_list = this.$refs.order_list;
-  	order_list.addEventListener('scroll',function() {
-  		console.log(this.scrollTop)
-  	},false)
+  	this.re_render();
   },
   data () {
     return {
-      order: '',
+      // order: this.$store.state.wholesaler_order_list,
       order_state: [{text:'待配货',state:'wait'},{text: '已配货', state:'prepared'},{text: '已发货', state: 'send'}, {text: '未付款', state: 'nopay'}, {text: '全部', state: 'all'}],
-      pay_way: [{text: '全部',state: 'all'},{text: '定期结算',state: 'regular'},{text: '在线支付',state: 'online'},{text: '货到付款',state: 'cash'}],
-      pay_way_current: 'all',
+      pay_way: [{text: '全部订单',state: 'all'},{text: '定期结算',state: 'regular'},{text: '在线支付',state: 'online'},{text: '货到付款',state: 'cash'}],
+      pay_way_current: {text: '全部订单',state: 'all'},
       order_state_current: 'wait',
       key_word:'',
+      isLoading: false,
+      finish: false,
+      page: 1,
+      pay_show: false,
+      pfsMap: {
+	    '定期结算': {
+	        '未付款': {
+	            '待配货': ['取消订单', '配货', '结算'],
+	            '已配货': ['配货', '结算', '发货'],
+	            '已发货': ['结算'],
+	            '已收货': ['结算'],
+	            '已取消': []
+	        },
+	        '已付款': {
+	            '待配货': ['配货'],
+	            '已配货': ['配货', '发货'],
+	            '已发货': [],
+	            '已收货': [],
+	            '已取消': []
+	        },
+	        '交易关闭':{
+		        	'待配货': [],
+		            '已配货': [],
+		            '已收货': [],
+		            '已取消': []
+		     },
+	        '交易完成':{
+		        	'待配货': [],
+		            '已配货': [],
+		            '已收货': [],
+		            '已取消': []
+		     }
+	    },
+	    '在线支付': {
+	        '未付款': {
+	            '待配货': ['取消订单'],
+	            '已配货': [],
+	            '已发货': [],
+	            '已收货': [],
+	            '已取消': []
+	        },
+	        '已付款': {
+	            '待配货': ['配货'],
+	            '已配货': ['配货', '发货'],
+	            '已发货': [],
+	            '已收货': [],
+	            '已取消': []
+	        },
+	        '交易关闭':{
+		        	'待配货': [],
+		            '已配货': [],
+		            '已收货': [],
+		            '已取消': []
+		    }
+		    ,
+	        '交易完成':{
+		        	'待配货': [],
+		            '已配货': [],
+		            '已收货': [],
+		            '已取消': []
+		     }
+	    },
+	    '货到付款': {
+	        '未付款': {
+	            '待配货': ['取消订单', '配货', '结算'],
+	            '已配货': ['配货', '发货', '结算'],
+	            '已发货': ['结算'],
+	            '已收货': ['结算'],
+	            '已取消': []
+	        },
+	        '已付款': {
+	            '待配货': ['配货'],
+	            '已配货': ['配货', '发货'],
+	            '已发货': [],
+	            '已收货': [],
+	            '已取消': []
+	        },
+	        '交易关闭':{
+		        	'待配货': [],
+		            '已配货': [],
+		            '已收货': [],
+		            '已取消': []
+		    }
+		    ,
+	        '交易完成':{
+		        	'待配货': [],
+		            '已配货': [],
+		            '已收货': [],
+		            '已取消': []
+		     }
+	    }
+	  }
     }
 
   },
@@ -84,39 +178,154 @@ export default {
   	goBack() {
   		this.$router.go(-1);
   	},
-  	reRouter(keyWord) {
-  		// this.$router.replace({path:'/retailer/order', query: { limit: keyWord }});
-  		this.render();
+  	show_pay_list() {
+  		this.pay_show = true;
   	},
-  	render() {
-  		var query = this.$route.query;
-	  	this.$store.dispatch('wholesaler_order',query).then((res) => {
-	  		this.order = res.data.data;
-		  	this.current = query.limit;
-		  	console.log(this.order);
-	  	}).catch((res) => {
-	  		alert('ERROR');
-	  	})
+  	close_pay_list() {
+  		if(this.pay_show) {
+  			this.pay_show = false;
+  		}
   	},
-  	btnOption(text,order) {
+  	change_state(order_state) {
+  		this.$refs.order_list.scrollTop = 0;
+  		this.order_state_current = order_state.state;
+  		this.re_render();
+  	},
+  	change_pay(pay_way){
+  		this.$refs.order_list.scrollTop = 0;
+  		this.pay_way_current = pay_way;
+  		this.pay_show = false;
+  		this.re_render();
+  	},
+  	serach_order() {
+  		this.$refs.order_list.scrollTop = 0;
+  		this.re_render();
+  	},
+  	re_render() {
+  		this.page = 1;
+  		this.finish = false;
+  		var limit = {
+	  		keyword: this.key_word,
+	  		pay_way: this.pay_way_current.state,
+	  		order_state: this.order_state_current,
+	  		page: this.page
+	  	}
+  		this.$store.dispatch('wholesaler_order',limit).then((res) => {
+	  		// this.order = res.data.data;
+	  		this.$store.commit('create_wholesaler_order_list', res.data.data);
 
-  		this.$store.dispatch('order_operation',{operation:text,limit:this.current,order_id:order.order_id,order_code:order.order_code}).then((res) => {
-  			if(text == '再次购买') {
-  				this.$router.push({path:'/retailer/buycar'})
-  			}
 	  	}).catch((res) => {
 	  		alert('ERROR');
 	  	})
+  	},
+  	opration(btn, order) {
+  		if(btn == '配货') {
+  			this.$store.commit('edit_order_detail', {order: order,scrollTop: this.$refs.order_list.scrollTop});
+  			this.$router.push({path:'/wholesaler/editOrder'});
+  		}
+  	},
+  	toOrderDetail(order) {
+  		this.$store.commit('edit_order_detail', {order: order,scrollTop: this.$refs.order_list.scrollTop});
+  		this.$router.push({path:'/wholesaler/orderDetail'});
+  	},
+  	scroll() {
+  		var _this = this;
+	  	var order_list = _this.$refs.order_list;
+	  	var windowH = null;
+	  	var last_order = null;
+	  	var order_parent = null;
+  		if(_this.isLoading) {
+  			return;
+  		}
+  		if(!order_parent) {
+  			windowH = order_list.clientHeight; 
+  			order_parent = order_list.querySelectorAll('.order-item');
+  			last_order = order_parent[order_parent.length - 1];
+  		}
+  		// console.log(order_list.scrollTop + windowH, windowH, last_order.offsetHeight + last_order.offsetTop, last_order.offsetHeight, last_order.offsetTop)
+  		if(order_list.scrollTop + windowH >= last_order.offsetHeight + last_order.offsetTop- 10) {
+  			console.log('loading');
+  			if(_this.finish) {
+	  			_this.$vux.toast.show({
+					text: '没有更多数据',
+					type: 'text',
+					position: 'bottom',
+					time:'2000'
+				})
+	  			return;
+	  		}
+  			_this.isLoading = true;
+  			var limit = {
+		  		keyword: _this.key_word,
+		  		pay_way: _this.pay_way_current.state,
+		  		order_state: _this.order_state_current,
+		  		page: ++_this.page
+		  	}
+  			_this.$store.dispatch('wholesaler_order', limit).then((res) =>{
+  				if(res.data.result) {
+
+  					// _this.order = _this.order.concat(res.data.data);
+  					_this.$store.commit('updata_wholesaler_order_list', res.data.data)
+  					_this.isLoading = false;
+					order_parent = null;
+					if(res.data.data.length < 10) {
+						_this.finish = true;
+					}
+  				}
+  			}).catch((err) =>{
+  				alert('Error')
+  			})
+  		}
+	 
   	}
   },
+  // 从编辑页面返回时，定位到当前编辑的订单,手动从store重新获取order
+  beforeRouteEnter(to, from, next) {
+  	if(!from.name) {
+  		next();
+  		return
+  	}
+  	if(from.name.indexOf('EditOrder') > -1) {
+  		next((vm) => {
+  			vm.$refs.order_list.scrollTop = vm.$store.state.wholesaler_order_detail.scrollTop;
+  			vm.$nextTick(() => {
+  				setTimeout(function() {
+
+	  				vm.$data.order = vm.$store.state.wholesaler_order_list;
+	  				// console.log(vm.$data.order);
+  				}, 200)
+  				
+  			})
+  		});
+  	}
+  	next();
+  },
+  //  离开order页面时，进入的不是编辑页面，则销毁order实例
+  beforeRouteLeave(to, from, next) {
+  	if(to.name.indexOf('EditOrder') < 0) {
+  		this.$destroy();
+  		next();
+  	}
+  	next();
+  },
+
   computed: {
   	order_compute() {
-  		
+  		if(!this.order) {
+  			return this.order;
+  		}
+  		for(var i = 0; i < this.order.length; i++) {
+  			var _btnList = this.pfsMap[this.order[i].pay_way][this.order[i].pay_state][this.order[i].state];
+  			this.order[i].btnList = _btnList;
+  		}
   		return this.order;
 
+  	},
+  	order() {
+  		// console.log(this.$store.state.wholesaler_order_list[2].goodsList[0].count)
+  		return this.$store.state.wholesaler_order_list;
   	}
-  },
-  components: {}
+  }
 }
 </script>
 
@@ -138,6 +347,7 @@ export default {
 		background-color: #f26721;
 		padding: 20/@fs 0;
 		color: #fff;
+		position: relative;
 		.content {
 			width: 690/@fs;
 			margin: 0 auto;
@@ -152,6 +362,15 @@ export default {
 			}
 			.title {
 				font-size: 34/@fs;
+				.icon {
+					display: inline-block;
+					width: 14/@fs;
+					transform:rotate(-90deg);
+					position: relative;
+					top: 2/@fs;
+					left: 5/@fs;
+				}
+				
 			}
 			.search {
 				opacity: 0;
@@ -160,6 +379,25 @@ export default {
 					width: 44/@fs;
 				}
 			}
+		}
+		.pay-way {
+			position: absolute;
+			// display: none;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			text-align: center;
+			background-color: #fff;
+			z-index: 999;
+			color: #333;
+			transform: translateY(100%);
+			.pay-item {
+				height: 70/@fs;
+				line-height: 70/@fs;
+				border-bottom: 1px solid #e0e0e0;
+			}
+			
+
 		}
 	}
 	.search-wrapper {
@@ -189,6 +427,7 @@ export default {
 				vertical-align: middle;
 				padding-left: 10/@fs;
 				width: 580/@fs;
+				height: 100%;
 
 			}
 		}
@@ -294,6 +533,26 @@ export default {
 					color: #282828;
 					.count {
 						color: #f16721;
+					}
+				}
+			}
+			.opration {
+				width: 690/@fs;
+				margin: 0 auto;
+				display: flex;
+				justify-content:flex-end;
+				padding: 15/@fs 0;
+				.btn {
+					margin-left: 10/@fs;
+					font-size: 30/@fs;
+					padding: 10/@fs 20/@fs;
+					background-color: rgba(105, 217, 252, 0.96);
+					color: #fff;
+					border-radius: 4/@fs;
+					&.cancle {
+						background-color: transparent;
+						font-size: 26/@fs;
+						color: #999;
 					}
 				}
 			}

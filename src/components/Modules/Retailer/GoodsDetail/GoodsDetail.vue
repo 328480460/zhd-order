@@ -29,7 +29,7 @@
 					<div class="add-reduce">
 						<Add_Reduce  :goods='goods_detail'></Add_Reduce>
 					</div>
-					<div class="add-car" @click.stop='add_car(goods_detail)'>
+					<div class="add-car" @click.stop='add_car(goods_detail, $event)'>
 						<i class="icon-buycar" ></i>
 					</div>
 				</div>
@@ -67,7 +67,7 @@
 			{{goods_detail.goods_detailed}}
 		</div>
 	</div>
-   	<CarCtrl :shop_car='shop_car' @getCount='getCount' @deleteGoods='deleteGoods' @clear_goods='clear_goods'></CarCtrl>
+   	<CarCtrl :shop_car='shop_car' @getCount='getCount' @deleteGoods='deleteGoods' @clear_goods='clear_goods' ref='carCtrl'></CarCtrl>
   </div>
 </template>
 	
@@ -108,7 +108,6 @@ export default {
   		this.$router.push({path:'/retailer/shop',query:{shop_id:this.shop_id}})
   	},
   	getCount(goods) {
-  		console.log(goods);
   		this.$store.dispatch('shop_update_goods',{shop_id:this.shop_id,goods_info:goods}).then((res) => {
 	  	}).catch((res) => {
 	  		alert('ERROR');
@@ -129,6 +128,7 @@ export default {
 	  	});
   	},
   	add_car(goods) {
+  		this.dropBall(event);
 		if(!goods.count) {
   			goods.count = 1;
   		}
@@ -138,6 +138,9 @@ export default {
 	  		alert('ERROR');
 	  	});
   	},
+  	dropBall(event) {
+  		this.$refs.carCtrl.drop(event.currentTarget);
+  	}
 
   },
   components: {

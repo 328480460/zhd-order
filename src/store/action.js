@@ -42,7 +42,7 @@ export default {
         return axios.post(retailer.get_goods_list_path, value);
     },
     shop_add_usual({ commit }, value) {
-        return axios.post(shop_add_usual_path, value);
+        return axios.post(retailer.shop_add_usual_path, value);
     },
     shop_add_goods({ commit }, value) {
         return axios.post(retailer.shop_add_goods_path, value);
@@ -58,6 +58,9 @@ export default {
     },
     wholesaler_order({ commit }, value) {
         return axios.post(wholesaler.order_path, value);
+    },
+    wholesaler_updata_order({ commit }, value) {
+        return axios.post(wholesaler.updata_order_path, value);
     }
 }
 

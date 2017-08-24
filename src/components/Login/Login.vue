@@ -81,6 +81,10 @@ export default {
 					// 零售商
 					this.$router.push({path:'/retailer/index'});
 				}
+				if(this.userInfo.USERTYPE == 1002) {
+					// 零售商
+					this.$router.push({path:'/wholesaler/order'});
+				}
 
 			} else {
 				alert(res.data[0].message);

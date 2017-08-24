@@ -16,6 +16,25 @@ import store from './store/store.js';
 
 import util from './assets/js/util.js';
 
+import math from './assets/js/math.js';
+
+//给Number类型增加一个add方法，，使用时直接用 .add 即可完成计算。 
+Number.prototype.add = function(arg) {
+    return math.accAdd(arg, this);
+};
+//给Number类型增加一个sub方法，，使用时直接用 .sub 即可完成计算。 
+Number.prototype.sub = function(arg) {
+    return math.Subtr(this, arg);
+};
+//给Number类型增加一个mul方法，使用时直接用 .mul 即可完成计算。 
+Number.prototype.mul = function(arg) {
+    return math.accMul(arg, this);
+};
+//给Number类型增加一个div方法，，使用时直接用 .div 即可完成计算。 
+Number.prototype.div = function(arg) {
+    return math.accDiv(this, arg);
+};
+
 router.beforeEach((to, from, next) => {
 	if(!util.getCookie('userId') && to.path !== '/login') {
 		next({path:'/login'});
