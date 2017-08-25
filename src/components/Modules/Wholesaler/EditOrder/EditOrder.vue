@@ -39,7 +39,7 @@
 				<div class="price">
 					<div class="all-price">
 						<span class="text">应收款:</span>
-						<span class="count">￥{{order.allPrice}}</span>
+						<span class="count">￥{{order.allprice}}</span>
 					</div>
 					<div class="final-price">
 						<span class="text">实收款: </span>

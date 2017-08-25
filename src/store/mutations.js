@@ -64,7 +64,9 @@ export default {
 		state.wholesaler_order_detail.order.allPrice = _allPrice;
 	},
 
-	clear_order_detail(state) {
-		state.wholesaler_order_detail.goodsList = null;
+	delete_order_detail(state) {
+		var idx = state.wholesaler_order_list.indexOf(state.wholesaler_order_detail.order);
+		state.wholesaler_order_list.splice(idx, 1);
+		
 	}
 }

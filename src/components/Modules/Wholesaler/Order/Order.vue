@@ -73,7 +73,6 @@ export default {
   },
   data () {
     return {
-      // order: this.$store.state.wholesaler_order_list,
       order_state: [{text:'待配货',state:'wait'},{text: '已配货', state:'prepared'},{text: '已发货', state: 'send'}, {text: '未付款', state: 'nopay'}, {text: '全部', state: 'all'}],
       pay_way: [{text: '全部订单',state: 'all'},{text: '定期结算',state: 'regular'},{text: '在线支付',state: 'online'},{text: '货到付款',state: 'cash'}],
       pay_way_current: {text: '全部订单',state: 'all'},
@@ -285,7 +284,7 @@ export default {
   		next();
   		return
   	}
-  	if(from.name.indexOf('EditOrder') > -1) {
+  	if(from.name.indexOf('EditOrder') > -1 || from.name.indexOf('OrderDetail') > -1 ) {
   		next((vm) => {
   			vm.$refs.order_list.scrollTop = vm.$store.state.wholesaler_order_detail.scrollTop;
   			vm.$nextTick(() => {
@@ -300,11 +299,12 @@ export default {
   	}
   	next();
   },
-  //  离开order页面时，进入的不是编辑页面，则销毁order实例
+  //  离开order页面时，进入的不是编辑页面，或者不是详情页面 则销毁order实例
   beforeRouteLeave(to, from, next) {
-  	if(to.name.indexOf('EditOrder') < 0) {
+  	if(!/EditOrder/.test(to.name) && !/OrderDetail/.test(to.name)) {
   		this.$destroy();
   		next();
+  		return;
   	}
   	next();
   },
@@ -322,7 +322,6 @@ export default {
 
   	},
   	order() {
-  		// console.log(this.$store.state.wholesaler_order_list[2].goodsList[0].count)
   		return this.$store.state.wholesaler_order_list;
   	}
   }

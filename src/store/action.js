@@ -61,6 +61,9 @@ export default {
     },
     wholesaler_updata_order({ commit }, value) {
         return axios.post(wholesaler.updata_order_path, value);
+    },
+    wholesaler_delete_order({ commit }, value) {
+        return axios.post(wholesaler.delete_order_path, value);
     }
 }
 
