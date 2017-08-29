@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	<div class="goods-banner">
-		<img src="./images/goods-banner_02.png">
+		<img :src="'http://202.106.219.6:13799/order/' + goods_detail.url">
 	</div>
 	<div class="goods-info">
 		<div class="content">
@@ -191,6 +191,7 @@ export default {
 		img {
 			display: block;
 			width: 100%;
+			height: 300/@fs;
 		}
 	}
 	.goods-info {

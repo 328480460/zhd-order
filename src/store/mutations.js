@@ -64,9 +64,11 @@ export default {
 		state.wholesaler_order_detail.order.allPrice = _allPrice;
 	},
 
+	// 删除订单详情
 	delete_order_detail(state) {
 		var idx = state.wholesaler_order_list.indexOf(state.wholesaler_order_detail.order);
 		state.wholesaler_order_list.splice(idx, 1);
 		
 	}
+
 }

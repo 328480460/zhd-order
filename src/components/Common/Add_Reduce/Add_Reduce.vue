@@ -27,8 +27,9 @@ export default {
   		}
   	},
   	add() {
+  		this.count++;
   		this.goods.count++;
-  		this.count = this.goods.count;
+  		// this.count = this.goods.count;
   	}
   },
   watch: {

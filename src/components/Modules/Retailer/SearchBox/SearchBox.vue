@@ -48,7 +48,7 @@
 								<img src="./images/icon_right_arrow_03.png">
 							</div>
 							<div class="cont">
-								<img src="./images/goods_07.png" @click='toGoodsDetail(item)'>
+								<img :src="'http://202.106.219.6:13799/order/'+ item.url"  @click='toGoodsDetail(item)'>
 								<div class="goods-info">
 									<p class="goods-name">{{item.goods_name}}</p>
 									<p class="price-standard">
@@ -78,7 +78,7 @@
 								<img src="./images/icon_right_arrow_03.png">
 							</div>
 							<div class="cont">
-								<img src="./images/goods_07.png"  @click='toGoodsDetail(item)'>
+								<img :src="'http://202.106.219.6:13799/order/'+ item.url"  @click='toGoodsDetail(item)'>
 								<div class="goods-info">
 									<p class="goods-name">{{item.goods_name}}</p>
 									<p class="price-standard">

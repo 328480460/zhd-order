@@ -70,8 +70,8 @@
 </template>
 
 <script>
-import axios from 'axios';
-import v_footer from '../../../Common/Footer/Footer.vue'
+import v_footer from '../../../Common/Footer/Footer.vue';
+
 export default {
   name: 'index',
   created() {

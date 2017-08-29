@@ -73,5 +73,13 @@ export default new Router({
 		path: '/wholesaler/orderDetail',
 		name: 'OrderDetail',
 		component: WholeSaler.OrderDetail
+	},{
+		path: '/wholesaler/index',
+		name: 'Index',
+		component: WholeSaler.Index
+	},{
+		path: '/wholesaler/goods',
+		name: 'Goods',
+		component: WholeSaler.Goods
 	}]
 })

@@ -60,6 +60,66 @@ var wholesaler = {
 			'url': ''
 		}]
 
-	}]
+	}],
+	'goods_manger': {
+		'length' : 20,
+		'goods_list': [{
+			'goods_name': '黄瓜',
+			'goods_id': '12321',
+			'standard': '斤',
+			'price': '1.99',
+			'count': '20',
+			'url': '',
+			'state': 'saleing'
+		},{
+			'goods_name': '黄瓜',
+			'goods_id': '12321',
+			'standard': '斤',
+			'price': '1.99',
+			'count': '20',
+			'url': '',
+			'state': 'saleing'
+		},{
+			'goods_name': '黄瓜',
+			'goods_id': '12321',
+			'standard': '斤',
+			'price': '1.99',
+			'count': '20',
+			'url': '',
+			'state': 'saleing'
+		},{
+			'goods_name': '黄瓜',
+			'goods_id': '12321',
+			'standard': '斤',
+			'price': '1.99',
+			'count': '20',
+			'url': '',
+			'state': 'saleing'
+		},{
+			'goods_name': '黄瓜',
+			'goods_id': '12321',
+			'standard': '斤',
+			'price': '1.99',
+			'count': '20',
+			'url': '',
+			'state': 'saleing'
+		},{
+			'goods_name': '黄瓜',
+			'goods_id': '12321',
+			'standard': '斤',
+			'price': '1.99',
+			'count': '20',
+			'url': '',
+			'state': 'saleing'
+		},{
+			'goods_name': '黄瓜',
+			'goods_id': '12321',
+			'standard': '斤',
+			'price': '1.99',
+			'count': '20',
+			'url': '',
+			'state': 'saleing'
+		}]
+	}
 }
 module.exports.wholesaler = wholesaler;

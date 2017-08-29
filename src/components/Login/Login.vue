@@ -23,11 +23,11 @@ import util from '../../assets/js/util.js';
 export default {
   name: 'login',
   created() {
-  	if(util.getCookie('remoberChecked')) {
-	  	this.userName = util.getCookie('userName') ? util.getCookie('userName'): '';
-	  	this.userPassword = util.getCookie('userName') ? util.getCookie('userPassword'): '';
-	  	this.remoberChecked = util.getCookie('remoberChecked');
-  	}
+  	// if(util.getCookie('remoberChecked')) {
+	  // 	this.userName = util.getCookie('userName') ? util.getCookie('userName'): '';
+	  // 	this.userPassword = util.getCookie('userName') ? util.getCookie('userPassword'): '';
+	  // 	this.remoberChecked = util.getCookie('remoberChecked');
+  	// }
 
   },
   data () {
@@ -76,14 +76,15 @@ export default {
 
 				}
 
-				console.log(this.userInfo.USERTYPE);
 				if(this.userInfo.USERTYPE == 1003) {
 					// 零售商
-					this.$router.push({path:'/retailer/index'});
+					// this.$router.push({path:'/retailer/index'});
+					this.$router.push({path:'/retailer/market', query: {market_id: this.userInfo.NODE_ID}});
+
 				}
 				if(this.userInfo.USERTYPE == 1002) {
 					// 零售商
-					this.$router.push({path:'/wholesaler/order'});
+					this.$router.push({path:'/wholesaler/index'});
 				}
 
 			} else {

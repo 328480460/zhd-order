@@ -14,21 +14,21 @@
 		</div>
 		<div class="address">
 			<div class="left">
-				<div class="name">零售商姓名: {{order_info.user_name}}</div>
+				<div class="name">零售商姓名: {{order_info.name}}</div>
 				<div class="address-cont" v-if='order_info.address'>收货地址: {{order_info.address[0]}}</div>
 			</div>
 			<div class="right">
 				<img src="./images/right_icon_03.png">
 			</div>
 		</div>
-		<div class="send-way">
+		<!-- <div class="send-way">
 			<h4 class="title ">配送方式</h4>
 			<div v-for="item in send_way.text" :class="{current: send_way.current== item}" @click="change_send_way(item)">{{item}}</div>
 		</div>
 		<div class="accounts_way">
 			<h4 class="title">结算方式</h4>
 			<div v-for="item in accounts_way.text" :class="{current: accounts_way.current== item}" @click="change_accounts_way(item)">{{item}}</div>
-		</div>
+		</div> -->
 		<div class="goods-info">
 			<ul>
 				<li v-for="item in goodsInfo">
@@ -38,7 +38,7 @@
 					</h4>
 					<div v-for="goods in item" class="goods-item">
 						<div class="left">
-							<img src="./images/goods_03.png">
+							<img :src="'http://202.106.219.6:13799/order/' + goods.url">
 							<div class="info">
 								<p>{{goods.goods_name}}</p>
 								<p>￥{{goods.price}}</p>
@@ -112,6 +112,9 @@ export default {
   		this.accounts_way.current = current;
   	},
   	submit_order() {
+  		if(!this.goodsInfo) {
+  			return
+  		}
   		var order = {};
   		var _ids = '';
   		var _chk_value = '';

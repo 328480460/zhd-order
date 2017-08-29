@@ -21,10 +21,9 @@
 			<div class="goods-list">
 				<div class="goods-item" v-for='goods in order.goodsList'>
 					<div class="left">
-						<img src="./images/goods_03.png">
+						<img :src="'http://202.106.219.6:13799/order/' + goods.url">
 						<div class="goods-info">
 							<div class="goods-name">{{goods.goods_name}}</div>
-							<!-- ({{goods.standard}}) -->
 							<Add_Reduce :goods='goods' @getCount='getCount'></Add_Reduce>
 							<div class="price">￥{{goods.price}}</div>
 						</div>
@@ -64,26 +63,28 @@ export default {
   data () {
     return {
     	origin_order: util.deepCopy(this.$store.state.wholesaler_order_detail.order),
-    	order: '',
+    	order: ''
     }
 
   },
   methods:{
   	goBack() {
+  		console.log('cancle')
   		this.$store.commit('drop_edit_order', this.origin_order);
-  		this.$router.go(-1);
+  		this.$router.push({path:'/wholesaler/order', query: {option: 'cancle',pay_way: this.$route.query.pay_way,order_state: this.$route.query.order_state}})
   	},
   	getCount(goods) {
   		goods.total_price = goods.price.mul(goods.count);
   		this.$store.commit('updata_order_detail', goods);
   		this.finalPrice = this.order.allPrice;
-  		console.log(this.finalPrice)
+  		// console.log(this.finalPrice)
   	},
   	confirm() {
+  		console.log('confrim')
   		// 确认修改
   		this.order.disbursements = this.finalPrice;
   		this.$store.dispatch('wholesaler_updata_order', this.order);
-  		this.$router.go(-1);
+  		this.$router.push({path:'/wholesaler/order', query: {option: 'confirm',pay_way: this.$route.query.pay_way,order_state: 'prepared'}})
   	},
   	changePrice() {
   		var input = this.$refs.finalPriceInput;

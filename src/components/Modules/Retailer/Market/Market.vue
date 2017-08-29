@@ -14,7 +14,8 @@
 			</div>
 		</div>
 		<div class="banner">
-			<img src="./images/market_banner_02.png">
+			<!-- <img src="./images/market_banner_02.png"> -->
+			<img :src="'http://202.106.219.6:13799/order/' + market_info.banner_url" v-if='market_info'>
 		</div>
 		<div class="classify" v-if='market_info'>
 			<scroller lock-y :bounce=true :scrollbar-x=false>
@@ -37,13 +38,15 @@
 				</div>
 				<div class="content">
 					<div class="shop" v-for='(shop, key) in item' v-if='key < 4' @click='toShop(shop)'>
-						<img src="./images/shop_avata_03.png">
+						<!-- <img src="./images/shop_avata_03.png"> -->
+						<img :src="'http://202.106.219.6:13799/order/' + shop.avata">
 						<span class="shop-name">{{shop.shop_name}}</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<!-- 更多 -->
 	<div class="classify-all" v-if='classify_all'>
 		<div class="classify-head">
 			<img src="./images/back_icon.png" class="back" @click='toMarket'>
@@ -51,18 +54,20 @@
 		</div>
 		<div class="classify-content">
 			<div class="item" v-for='shop in classify_all.shopList' @click='toShop(shop)'>
-				<img src="./images/shop_avata_03.png">
+				<img :src="'http://202.106.219.6:13799/order/' + shop.avata">
 				<span class="shop-name">
 					{{shop.shop_name}}
 				</span>
 			</div>
 		</div>
 	</div>
+	<v_footer :cur="0"></v_footer>
   </div>
 </template>
 
 <script>
-import {Scroller} from 'vux'
+import {Scroller} from 'vux';
+import v_footer from '../../../Common/Footer/Footer.vue';
 export default {
   name: 'market',
   created() {
@@ -114,7 +119,8 @@ export default {
   	}
   },
   components: {
-    Scroller
+    Scroller,
+    v_footer
   },
 }
 </script>
@@ -130,6 +136,7 @@ export default {
 		left: 0;
 		right: 0;
 		top: 0;
+		padding-bottom: 120/@fs;
 	}
 	.header {
 		width: 100%;

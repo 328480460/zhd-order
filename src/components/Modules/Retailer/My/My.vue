@@ -63,12 +63,13 @@
     			</ul>
     		</div>
     	</div>
-    	<v_footer :cur="3"></v_footer>
+    	<v_footer :cur="3" :market_id='market_id'></v_footer>
   </div>
 </template>
 
 <script>
-import v_footer from '../../../Common/Footer/Footer.vue'
+import v_footer from '../../../Common/Footer/Footer.vue';
+import util from '../.../../../../../assets/js/util.js';
 export default {
   name: 'my',
   created() {
@@ -82,7 +83,8 @@ export default {
   },
   data () {
     return {
-      info: ''
+      info: '',
+      market_id: util.getCookie('nodeId')
     }
   },
   methods: {

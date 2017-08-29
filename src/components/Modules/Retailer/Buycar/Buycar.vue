@@ -21,7 +21,7 @@
 				<div class="cont goods-item" v-for="goods in item.goodsList">
 					<div class="goods-image">
 						<CheckBox :goods='goods' @getCheckState='getCheckState'></CheckBox>
-						<img src="./images/goods_07.png">
+						<img :src="'http://202.106.219.6:13799/order/' + goods.url ">
 					</div>
 					<div class="goods-info">
 						<p class="goods-name">{{goods.goods_name}}</p>
@@ -57,7 +57,7 @@
     		结算
     	</div>
     </div>
-    <v_footer :cur="2"></v_footer>
+    <v_footer :cur="2" :market_id='market_id'></v_footer>
   </div>
 </template>
 
@@ -65,6 +65,7 @@
 import v_footer from '../../../Common/Footer/Footer.vue';
 import Add_Reduce from '../../../Common/Add_Reduce/Add_Reduce.vue';
 import CheckBox from '../../../Common/CheckBox/CheckBox.vue';
+import util from '../.../../../../../assets/js/util.js';
 export default {
   name: 'shopcar',
   created() {
@@ -79,6 +80,7 @@ export default {
   data () {
     return {
     	shop_info: {},
+    	market_id: util.getCookie('nodeId')
     }
   },
   methods: {

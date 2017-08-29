@@ -2,20 +2,20 @@
   <div class="footer">
  	<ul>
  		<li :class="{current: cur===0}" @click='toIndex'>
- 			<i class="icon-index font"></i>
- 			首页
+ 			<i class="icon-pfs-shop font"></i>
+ 			店铺
  		</li>
- 		<li :class="{current: cur===1}" @click='toClassify'>
- 			<i class="icon-classify font"></i>
- 			分类
+ 		<li :class="{current: cur===1}" @click='toMyretailer'>
+ 			<i class="icon-pfs-retailer font"></i>
+ 			我的零售商
  		</li>
- 		<li :class="{current: cur===2}" @click='toBuycar'>
- 			<i class="icon-buycar font"></i>
- 			购物车
+ 		<li :class="{current: cur===2}" @click='toMessage'>
+ 			<i class="icon-pfs-message font"></i>
+ 			消息
  		</li>
- 		<li :class="{current: cur===3}" @click='toMy'>
- 			<i class="icon-my font"></i>
- 			我的
+ 		<li :class="{current: cur===3}" @click='toMore'>
+ 			<i class="icon-pfs-more font"></i>
+ 			更多
  		</li>
  	</ul>
   </div>
@@ -23,25 +23,23 @@
 
 <script>
 export default {
-  name: 'footer',
+  name: 'footerwholesaler',
   data () {
   	return {}
   },
-  props:['cur','market_id'],
+  props:['cur'],
   methods: {
   	toIndex() {
-  		this.$router.push({ path: '/retailer/market', query: {market_id: this.market_id} });
-  		// this.$router.push({ path: '/retailer/index' });
+  		this.$router.push({ path: '/wholesaler/index' });
   	},
-  	toClassify() {
-
-  		alert('暂未开放');
+  	toMyretailer() {
+  		// this.$router.push({ path: '/wholesaler/myretailer' })
   	},
-  	toBuycar() {
-  		this.$router.push({ path: '/retailer/buycar' })
+  	toMessage() {
+  		// this.$router.push({ path: '/wholesaler/message' })
   	},
-  	toMy() {
-  		this.$router.push({ path: '/retailer/my' })
+  	toMore() {
+  		// this.$router.push({ path: '/wholesaler/more' })
   	}
   }
 }

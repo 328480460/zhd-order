@@ -36,7 +36,7 @@
 			<div class="goods-list">
 				<div class="goods-item" v-for='(goods, index) in order.goodsList' v-if='index < showCount'>
 					<div class="left">
-						<img src="./images/goods_03.png">
+						<img :src="'http://202.106.219.6:13799/order/' + goods.url">
 						<div class="info">
 							<div class="name">{{goods.goods_name}}</div>
 							<div class="count">数量: {{goods.count}}</div>

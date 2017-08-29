@@ -16,7 +16,7 @@
 		<div class="shop-info">
 			<div class="info">
 				<div class="left">
-					<img src="./images/shop_avata_03.png" class="shop-avata">
+					<img :src="'http://202.106.219.6:13799/order/' + shop_info.avata" class="shop-avata" v-if='shop_info'>
 					<div class="usual" v-if='shop_info.usually'>
 						<i class="icon-collected" ></i>
 						<span>已添加</span>
@@ -45,7 +45,7 @@
 			<div class="goods-list" >
 				<div class="goods-item" v-for='item in goods_list' >
 					<div class="goods-img" @click='toGoodDetail(item)'>
-						<img src="./images/goods_07.png">
+						<img :src="'http://202.106.219.6:13799/order/' + item.url">
 					</div>
 					<div class="goods-info">
 						<div class="name">
@@ -181,6 +181,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 	@fs:100rem;
+
 	::-webkit-scrollbar {display:none;}
 	.shop {
 		background-color: #f0f0f0;
@@ -315,6 +316,7 @@ export default {
 			right: 0;
 			overflow-x: hidden;
 			overflow-y: scroll; 
+			-webkit-overflow-scrolling : touch;
 			.goods-item {
 				display: flex;
 				justify-content:space-between;
@@ -339,6 +341,19 @@ export default {
 					.name {
 						display: flex;
 						justify-content:space-between;
+
+						span {
+							display: block;
+							// width: 100/@fs;
+							// flex: 0 0 100/@fs;
+							&:first-child {
+								width: 240/@fs;
+								overflow: hidden;
+								text-overflow:ellipsis;
+								white-space: nowrap;
+								flex: 0 0 240/@fs;
+							}
+						}
 					}
 					.add-reduce-car {
 						display: flex;

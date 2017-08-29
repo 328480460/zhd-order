@@ -151,6 +151,15 @@ var interface = function(express) {
 		})
 	});
 
+	// 商品管理接口
+
+	apiRoutes.post('/wholesaler/wholesalerGoods', (req, res) => {
+		res.json({
+			result: true,
+			data: wholesaler.goods_manger
+		})
+	})
+
 
 
 

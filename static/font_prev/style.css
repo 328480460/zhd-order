@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?d0lpra');
-  src:  url('fonts/icomoon.eot?d0lpra#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?d0lpra') format('truetype'),
-    url('fonts/icomoon.woff?d0lpra') format('woff'),
-    url('fonts/icomoon.svg?d0lpra#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?9gthtp');
+  src:  url('fonts/icomoon.eot?9gthtp#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?9gthtp') format('truetype'),
+    url('fonts/icomoon.woff?9gthtp') format('woff'),
+    url('fonts/icomoon.svg?9gthtp#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -34,22 +34,6 @@ i, .icomoon-liga {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-pfs-shop:before {
-  content: "\e906";
-  color: #656565;
-}
-.icon-pfs-retailer:before {
-  content: "\e907";
-  color: #656565;
-}
-.icon-pfs-message:before {
-  content: "\e908";
-  color: #656565;
-}
-.icon-pfs-more:before {
-  content: "\e909";
-  color: #656565;
-}
 .icon-classify:before {
   content: "\e900";
   color: #656565;
