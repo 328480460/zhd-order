@@ -36,6 +36,8 @@ var shop_delete_goods_path = baseUrl + '/api/retailer/shop_delete_goods';
 var shop_update_goods_path = baseUrl + '/api/retailer/shop_update_goods';
 // 零售商 批发市场接口
 var market_path = baseUrl + '/api/retailer/market';
+// 零售商 常用店铺接口地址
+var regular_shop_path =  '/api/retailer/regular_shop';
 
 export default {
 	retailer_path,
@@ -53,5 +55,6 @@ export default {
 	shop_delete_goods_path,
 	shop_add_goods_path,
 	shop_update_goods_path,
-	market_path
+	market_path,
+	regular_shop_path
 }

@@ -56,6 +56,9 @@ export default {
     market({ commit }, value) {
         return axios.post(retailer.market_path, value);
     },
+    regular_shop({ commit }, value) {
+        return axios.post(retailer.regular_shop_path, value);
+    },
     wholesaler_order({ commit }, value) {
         return axios.post(wholesaler.order_path, value);
     },

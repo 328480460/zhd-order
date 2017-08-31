@@ -202,7 +202,6 @@ export default {
   		this.re_render();
   	},
   	re_render() {
-  		console.log('re_render')
   		this.page = 1;
   		this.finish = false;
   		var limit = {
@@ -301,7 +300,6 @@ export default {
   	if(from.name.indexOf('EditOrder') > -1) {
   		next((vm) => {
   			if(vm.$route.query.option == 'confirm') {
-  				console.log(vm.$route.query.option);
   				vm.$data.order_state_current = vm.$route.query.order_state;
   				vm.$data.pay_way_current = vm.$data.pay_way.filter((value, index) => {
   					return value.state == vm.$route.query.pay_way;

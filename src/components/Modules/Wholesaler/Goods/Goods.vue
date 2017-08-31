@@ -183,7 +183,6 @@ export default {
   			order_parent = order_list.querySelectorAll('.order-item');
   			last_order = order_parent[order_parent.length - 1];
   		}
-  		// console.log(order_list.scrollTop + windowH, windowH, last_order.offsetHeight + last_order.offsetTop, last_order.offsetHeight, last_order.offsetTop)
   		if(order_list.scrollTop + windowH >= last_order.offsetHeight + last_order.offsetTop- 10) {
   			console.log('loading');
   			if(_this.finish) {
@@ -203,7 +202,6 @@ export default {
 		  	}
   			_this.$store.dispatch('wholesaler_goods', limit).then((res) =>{
   				if(res.data.result) {
-  					console.log(res.data.data)
   					_this.goods_info.goods_list = _this.goods_info.goods_list.concat(res.data.data.goods_list);
   					
   					_this.isLoading = false;
@@ -218,46 +216,6 @@ export default {
   		}
 	 
   	}
-  },
-  // 从编辑页面返回时，定位到当前编辑的订单,手动从store重新获取order
-  beforeRouteEnter(to, from, next) {
-  	if(!from.name) {
-  		next();
-  		return
-  	}
-  	if(from.name.indexOf('EditOrder') > -1) {
-  		next((vm) => {
-  			if(vm.$route.query.option == 'confirm') {
-  				console.log(vm.$route.query.option);
-  				vm.$data.goods_state_current = vm.$route.query.goods_state;
-  				vm.$data.pay_way_current = vm.$data.pay_way.filter((value, index) => {
-  					return value.state == vm.$route.query.pay_way;
-  				})[0]
-
-  				vm.re_render();
-
-  				return
-  			}
-  			vm.$refs.order_list.scrollTop = vm.$store.state.wholesaler_order_detail.scrollTop;
-  			vm.$nextTick(() => {
-  				setTimeout(function() {
-	  				vm.$data.order = vm.$store.state.wholesaler_order_list;
-  				}, 100)
-  				
-  			})
-  		});
-  		return
-  	}
-
-  	next();
-  },
-  beforeRouteLeave(to, from, next) {
-  	if(!/EditOrder/.test(to.name) && !/OrderDetail/.test(to.name)) {
-  		this.$destroy();
-  		next();
-  		return;
-  	}
-  	next();
   }
 }
 </script>

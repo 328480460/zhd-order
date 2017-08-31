@@ -35,7 +35,7 @@
     					<p>我的优惠券</p>
     					<img src="./images/right_icon_03.png" class="right_arrow">
     				</li>
-    				<li>
+    				<li @click='toRegularShop'>
     					<img src="./images/icon_16.png" class="icon">
     					<p>收藏商铺</p>
     					<img src="./images/right_icon_03.png" class="right_arrow">
@@ -90,6 +90,9 @@ export default {
   methods: {
   	toOrder(keyWord) {
   		this.$router.push({path:'/retailer/order', query: { limit: keyWord }});
+  	},
+  	toRegularShop() {
+  		this.$router.push({path:'/retailer/regularShop'})
   	}
   },
   components: {

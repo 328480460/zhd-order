@@ -122,4 +122,50 @@ var wholesaler = {
 		}]
 	}
 }
+var retailer = {
+	'regular_shop' : [{
+		'avata': '',
+		'shop_name': 'xxx商铺',
+		'shop_id': '1103',
+		'type': '蔬菜批发',
+		'wholesaler_name': '墨善',
+		'allow_order': true
+	},{
+		'avata': '',
+		'shop_name': 'xxx商铺',
+		'shop_id': '1103',
+		'type': '蔬菜批发',
+		'wholesaler_name': '墨善',
+		'allow_order': true
+	},{
+		'avata': '',
+		'shop_name': 'xxx商铺',
+		'shop_id': '1102',
+		'type': '蔬菜批发',
+		'wholesaler_name': '墨善',
+		'allow_order': true
+	},{
+		'avata': '',
+		'shop_name': 'xxx商铺',
+		'shop_id': '1101',
+		'type': '蔬菜批发',
+		'wholesaler_name': '墨善',
+		'allow_order': false
+	},{
+		'avata': '',
+		'shop_name': 'xxx商铺',
+		'shop_id': '1106',
+		'type': '蔬菜批发',
+		'wholesaler_name': '墨善',
+		'allow_order': false
+	},{
+		'avata': '',
+		'shop_name': 'xxx商铺',
+		'shop_id': '1109',
+		'type': '蔬菜批发',
+		'wholesaler_name': '墨善',
+		'allow_order': false
+	},]
+}
 module.exports.wholesaler = wholesaler;
+module.exports.retailer = retailer;
