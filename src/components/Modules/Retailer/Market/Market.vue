@@ -15,7 +15,7 @@
 		</div>
 		<div class="banner">
 			<!-- <img src="./images/market_banner_02.png"> -->
-			<img :src="'http://202.106.219.6:13799/order/' + market_info.banner_url" v-if='market_info'>
+			<!-- <img :src="'http://202.106.219.6:13799/order/' + market_info.banner_url" v-if='market_info'> -->
 		</div>
 		<div class="classify" v-if='market_info'>
 			<scroller lock-y :bounce=true :scrollbar-x=false>

@@ -28,7 +28,7 @@
 				</div>
 				<div class="right">
 					<p class="shop-name">{{shop_info.shop_name}}</p>
-					<p class="market-name">{{shop_info.market_name}}</p>
+					<!-- <p class="market-name">{{shop_info.market_name}}</p> -->
 					<p class="limit0time">截单时间: {{shop_info.limit_time}}</p>
 					<p class="send-area">配送范围: {{shop_info.send_area}}</p>
 				</div>
@@ -77,7 +77,8 @@ export default {
   	this.$store.dispatch('shop_info',{shop_id:this.shop_id}).then((res) => {
   		this.shop_info = res.data.data;
   		this.classify = this.shop_info.goods_type_list;
-  		this.goods_list = this.shop_info.goods_list.recommend.list;
+  		// this.goods_list = this.shop_info.goods_list.recommend.list;
+  		this.goods_list = this.shop_info.goods_list.all.list;
   	}).catch((res) => {
   		alert('ERROR');
   	})
@@ -87,7 +88,8 @@ export default {
      	shop_info: '',
      	classify: '',
      	goods_list: '',
-     	current: 'recommend',
+     	// current: 'recommend',
+     	current: 'all',
      	listShow: false,
      	shop_id: this.$route.query.shop_id,
      	postion_ele: '',
@@ -237,12 +239,15 @@ export default {
 	}
 	.shop-info {
 		background: #fff;
-		padding: 30/@fs 30/@fs;
+		padding: 20/@fs 30/@fs;
 		display: flex;
 		justify-content: space-between;
 		align-items:center;
 		height: 160/@fs;
 		.info {
+			display: flex;
+			justify-content:flex-start;
+			align-items: flex-start;
 			.left {
 				display: inline-block;
 				.shop-avata {
@@ -260,11 +265,11 @@ export default {
 				display: inline-block;
 				color: #959595;
 				font-size: 28/@fs;
-				margin-left: 12/@fs;
+				margin-left: 20/@fs;
 			}
 		}
 		.more-phone {
-			height: 166/@fs;
+			height: 120/@fs;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
@@ -283,7 +288,7 @@ export default {
 	.shop-cont {
 		background: #fff;
 		position: absolute;
-		top: 310/@fs;
+		top: 290/@fs;
 		width: 100%;
 		bottom: 90/@fs;
 		overflow: scroll;
