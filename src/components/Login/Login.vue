@@ -23,11 +23,11 @@ import util from '../../assets/js/util.js';
 export default {
   name: 'login',
   created() {
-  	// if(util.getCookie('remoberChecked')) {
-	  // 	this.userName = util.getCookie('userName') ? util.getCookie('userName'): '';
-	  // 	this.userPassword = util.getCookie('userName') ? util.getCookie('userPassword'): '';
-	  // 	this.remoberChecked = util.getCookie('remoberChecked');
-  	// }
+  	if(util.getCookie('remoberChecked')) {
+	  	this.userName = util.getCookie('userName') ? util.getCookie('userName'): '';
+	  	this.userPassword = util.getCookie('userName') ? util.getCookie('userPassword'): '';
+	  	this.remoberChecked = util.getCookie('remoberChecked');
+  	}
 
   },
   data () {

@@ -1,7 +1,7 @@
 <template>
   <div class="shop">
    	<div class="container">
-   		<div class="header">
+   		<div class="header" @touchmove.prevent>
 			<div class="content">
 				<div class="back" @click='back()'>
 					<img src="./images/back_icon.png" >
@@ -13,7 +13,7 @@
 				
 			</div>
 		</div>
-		<div class="shop-info">
+		<div class="shop-info" :class='{"showDetail": !showDetail}' @touchmove.prevent>
 			<div class="info">
 				<div class="left">
 					<img :src="'http://202.106.219.6:13799/order/' + shop_info.avata" class="shop-avata" v-if='shop_info'>
@@ -35,14 +35,14 @@
 			</div>
 			<div class="more-phone">
 				<img src="./images/phone_icon_04.png">
-				<p class="more">查看更多></p>
+				<p class="more" @click='toShopDetail'>查看更多></p>
 			</div>
 		</div>
-		<div class="shop-cont">
-			<div class="classify">
+		<div class="shop-cont" :class='{"more-vision": !showDetail}'>
+			<div class="classify" @touchmove.prevent>
 				<div class="classify-item" :class="{current: current == item.type_id}" v-if='classify' v-for='(item, key) in classify' @click='change_classify(item)'>{{item.type_name}}</div>
 			</div>
-			<div class="goods-list" >
+			<div class="goods-list" @scroll='scroll($event)' ref='goodsList' @touchmove='noSroll($event)' @touchstart='touchstart($event)'>
 				<div class="goods-item" v-for='item in goods_list' >
 					<div class="goods-img" @click='toGoodDetail(item)'>
 						<img :src="'http://202.106.219.6:13799/order/' + item.url">
@@ -93,6 +93,9 @@ export default {
      	listShow: false,
      	shop_id: this.$route.query.shop_id,
      	postion_ele: '',
+     	showDetail:true,
+     	refList: this.$refs,
+     	startY: null //针对微信下拉显示网页地址
     }
   },
   computed: {
@@ -109,6 +112,10 @@ export default {
   	},
   	toSearchBox() {
   		this.$router.push({path:'/retailer/searchbox'})
+  	},
+  	toShopDetail() {
+  		this.$store.commit('create_shop_detail', this.shop_info);
+  		this.$router.push({path:'/retailer/shopDetail'});
   	},
   	get_goods_list(value) {
   		this.$store.dispatch('get_goods_list',{shop_id: this.shop_id,type_id:value}).then((res) => {
@@ -171,6 +178,29 @@ export default {
   	},
   	dropBall(event) {
   		this.$refs.carCtrl.drop(event.currentTarget);
+  	},
+  	scroll(event) {
+  		// var goodsList = this.$refs.goodsList;
+  		// console.log(this.refList.goodsList.scrollTop);
+  		if(this.refList.goodsList.scrollTop > 100) {
+  			this.showDetail = false;
+  		} else {
+  			this.showDetail = true;
+  		}
+
+  	},
+  	// 微信优化，下拉不显示地址
+  	noSroll(event) {
+  		// var goodsList = this.$refs.goodsList;
+  		// console.log(event.touches[0].clientY);
+  		if(this.refList.goodsList.scrollTop == 0) {
+  			if(this.startY < event.touches[0].clientY) {
+  				event.preventDefault();  				
+  			}
+  		}
+  	},
+  	touchstart(event) {
+  		this.startY = event.touches[0].clientY;
   	}
   },
   components: {
@@ -244,6 +274,13 @@ export default {
 		justify-content: space-between;
 		align-items:center;
 		height: 160/@fs;
+		z-index: -1;
+		transition: all .3s;
+		overflow: hidden;
+		&.showDetail {
+   			height: 0;
+   			padding: 0;
+		}
 		.info {
 			display: flex;
 			justify-content:flex-start;
@@ -292,6 +329,10 @@ export default {
 		width: 100%;
 		bottom: 90/@fs;
 		overflow: scroll;
+		transition: all .3s;
+		&.more-vision {
+			top: 90/@fs;
+		}
 		.classify {
 			position: absolute;
 			top: 0;
@@ -326,7 +367,7 @@ export default {
 				display: flex;
 				justify-content:space-between;
 				align-items:flex-start;
-				padding: 20/@fs 30/@fs 20/@fs 0;
+				padding: 10/@fs 30/@fs 10/@fs 0;
 				border-bottom: 1px solid #e0e0e0;
 				&:last-child {
 					border-bottom: 0;

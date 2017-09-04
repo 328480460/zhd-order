@@ -14,9 +14,19 @@ export default {
 		state.current_order = null;
 	},
 
+	// 批发商查看订单详情
+	retailer_order_detail(state,obj) {
+		state.retailer_order_detail = obj;
+	},
+
 	// 生成goods详情
 	create_goods_detail(state,goods) {
 		state.goods_detail = goods;
+	},
+
+	// 生成shop详情
+	create_shop_detail(state,shop) {
+		state.shop_detail = shop;
 	},
 
 	// 生成批发商order 

@@ -165,7 +165,8 @@ var retailer = {
 		'type': '蔬菜批发',
 		'wholesaler_name': '墨善',
 		'allow_order': false
-	},]
+	}],
+	
 }
 module.exports.wholesaler = wholesaler;
 module.exports.retailer = retailer;

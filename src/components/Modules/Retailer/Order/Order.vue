@@ -19,22 +19,20 @@
 		<div class="line"></div>
 		<div class="order-list" v-if='order'>
 			<ul>
-				<li v-for="(item,key) in order_compute" :key=key>
+				<li v-for="(item,key) in order_compute" :key=key >
 					<div class="order-header">
 						<div class="shop-name" @click='goShop(item)'>{{item.shop_name}} &gt;</div>
 						<div class="state" :class={}>{{item.state}}</div>
 					</div>
 					<div class="goods-info">
-						<ul v-if="item.goodsList.length > 4">
+						<ul v-if="item.goodsList.length > 4" @click='goOrderDetail(item)'>
 							<li v-for="n in 4" :key=key>
-								<!-- <img src="./images/goods_03.png"> -->
 								<img :src="'http://202.106.219.6:13799/order/' + item.goodsList[n].url">
 							</li>
 							<li> ▪ ▪ ▪ </li>
 						</ul>
-						<ul v-else>
+						<ul v-else  @click='goOrderDetail(item)'>
 							<li v-for="(good, key) in item.goodsList" :key=key>
-								<!-- <img src="./images/goods_07.png"> -->
 								<img :src="'http://202.106.219.6:13799/order/' + good.url">
 							</li>
 						</ul>
@@ -187,6 +185,10 @@ export default {
   	},
   	goShop(orderInfo) {
   		this.$router.push({path:'/retailer/shop',query:{shop_id: orderInfo.shop_id}})
+  	},
+  	goOrderDetail(order) {
+  		this.$store.commit('retailer_order_detail', {orderDetail: order, scrollTop: document.documentElement.scrollTop});
+  		this.$router.push({path: '/retailer/orderDetail'})
   	}
   },
   computed: {

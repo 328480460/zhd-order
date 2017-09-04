@@ -8,37 +8,37 @@
 			<div class="title">我的常用商铺</div>
 		</div>
 	</div>
-	<div class="shop-list" v-if='regular_info'>
+	<div class="shop-list" v-if='regular_info' >
 		<div class='shop-item' v-for='shop in regular_info'>
 			<div class="left">
-				<img src="./images/shop_avata_03.png">
+				<img src="./images/shop_avata_03.png"  @click.stop='toShop(shop)'>
 				<div class="shop-info">
 					<div class="name">{{shop.shop_name}}</div>
 					<div class="type">经营类型: {{shop.type}}</div>
 					<div class="wholesaler-name">经营类型: {{shop.wholesaler_name}}</div>
 				</div>
 			</div>
-			<div class="more" :class='{"allow": shop.allow_order}'>
+			<div class="more" :class='{"allow": shop.allow_order}' @click.stop='showOptation(shop)'>
 				<span v-for='i in 3'></span>
 			</div>
 		</div>
 	</div>
-	<div class="optation">
+	<div class="optation" v-if='optation'>
 		<div class="top">
-			<div class="allow">
+			<div class="allow" @click='allow'>
 				<img src="./images/regular_icon_03.png">
 				<p>允许代下单</p>
 			</div>
-			<div class="delete">
+			<div class="delete" @click='delete_shop'>
 				<img src="./images/regular_icon_05.png">
 				<p>删除</p>
 			</div>
-			<div class="forbiden">
+			<div class="forbiden" @click='forbiden'>
 				<img src="./images/regular_icon_07.png">
 				<p>禁止代下单</p>
 			</div>
 		</div>
-		<div class="cancle">取消</div>
+		<div class="cancle" @click='cancle'>取消</div>
 	</div>
   </div>
 </template>
@@ -57,13 +57,40 @@ export default {
   },
   data () {
     return {
-      regular_info: null
+      regular_info: null,
+      optation: false,
+      current_optation: null
     }
   },
   methods: {
   	back() {
   		this.$router.go(-1);
   	},
+  	toShop(shop) {
+  		this.$router.push({path:'/retailer/shop', query: {shop_id: shop.shop_id}})
+  	},
+  	showOptation(shop) {
+  		this.optation = true;
+  		this.current_optation = shop;
+  	},
+  	allow(){
+  		this.current_optation.allow_order = true;
+  		// to back
+  	},
+  	delete_shop() {
+  		// to back
+  		this.regular_info = this.regular_info.filter((value, index) => {
+  			return this.current_optation !== value;
+  		})
+  	},
+  	forbiden() {
+  		// to back
+  		this.current_optation.allow_order = false;
+  	},
+  	cancle() {
+  		this.optation = false;
+  	}
+
   }
 }
 </script>

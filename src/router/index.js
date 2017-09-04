@@ -41,6 +41,10 @@ export default new Router({
 		path: '/retailer/shop',
 		name: 'Shop',
 		component: Retailer.Shop
+	},{
+		path: '/retailer/shopDetail',
+		name: 'ShopDetail',
+		component: Retailer.ShopDetail
 	}, {
 		path: '/retailer/goodsDetail',
 		name: 'GoodsDetail',
@@ -53,6 +57,10 @@ export default new Router({
 		path: '/retailer/order',
 		name: 'Order',
 		component: Retailer.Order
+	}, {
+		path: '/retailer/orderDetail',
+		name: 'OrderDetail',
+		component: Retailer.OrderDetail
 	}, {
 		path: '/retailer/searchbox',
 		name: 'SearchBox',
