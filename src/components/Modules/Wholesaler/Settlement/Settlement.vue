@@ -12,6 +12,10 @@
 		</div>
 	</div>
 	<div class="function">
+		<div class="change-shop">
+			<span>切换店铺</span>
+			<img src="./images/icon_right_arrow_03.png">
+		</div>	
 		<div class="re-word">
 			<span>修改密码</span>
 			<img src="./images/icon_right_arrow_03.png">
@@ -24,11 +28,13 @@
 	<div class="exit" @click='exit'>
 		退出登录
 	</div>
+	<Footer_Wholesaler :cur='3'></Footer_Wholesaler>
   </div>
 </template>
 
 <script>
 import util from '../../../../assets/js/util.js';
+import Footer_Wholesaler from '../../../Common/Footer_Wholesaler/Footer_Wholesaler.vue'
 export default {
   name: 'settlement',
   data () {
@@ -49,6 +55,9 @@ export default {
 		util.removeCookie('remoberChecked');
   		this.$router.push({path:'/login'})
   	}
+  },
+  components: {
+  	Footer_Wholesaler
   }
 }
 </script>

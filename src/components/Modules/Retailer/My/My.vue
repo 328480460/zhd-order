@@ -9,20 +9,20 @@
     		<div class="myorder">
     			<div class="content">
 	    			<div class="title">我的订单</div>
-	    			<div class="allOrder" @click='toOrder("all")'>全部订单&gt;</div>
+	    			<div class="allOrder" @click='goOrder("all")'>全部订单&gt;</div>
     			</div>
     		</div>
     		<div class="line"></div>
     		<div class="pay-state" >
-    			<div class="no-pay" @click='toOrder("noPay")'>
+    			<div class="no-pay" @click='goOrder("noPay")'>
     				<img src="./images/icon_03.png">
     				待付款
     			</div>
-    			<div class="no-send" @click='toOrder("send")'>
+    			<div class="no-send" @click='goOrder("send")'>
     				<img src="./images/icon_05.png">
     				已发货
     			</div>
-    			<div class="no-receive" @click='toOrder("pay")'>
+    			<div class="no-receive" @click='goOrder("pay")'>
     				<img src="./images/icon_07.png">
     				已付款
     			</div>
@@ -35,7 +35,7 @@
     					<p>我的优惠券</p>
     					<img src="./images/right_icon_03.png" class="right_arrow">
     				</li>
-    				<li @click='toRegularShop'>
+    				<li @click='goRegularShop'>
     					<img src="./images/icon_16.png" class="icon">
     					<p>收藏商铺</p>
     					<img src="./images/right_icon_03.png" class="right_arrow">
@@ -55,7 +55,7 @@
     					<p>联系我们</p>
     					<img src="./images/right_icon_03.png" class="right_arrow">
     				</li>
-    				<li>
+    				<li @click='goSettlement'>
     					<img src="./images/icon_24.png" class="icon">
     					<p>设置</p>
     					<img src="./images/right_icon_03.png" class="right_arrow">
@@ -88,11 +88,14 @@ export default {
     }
   },
   methods: {
-  	toOrder(keyWord) {
+  	goOrder(keyWord) {
   		this.$router.push({path:'/retailer/order', query: { limit: keyWord }});
   	},
-  	toRegularShop() {
+  	goRegularShop() {
   		this.$router.push({path:'/retailer/regularShop'})
+  	},
+  	goSettlement() {
+  		this.$router.push({path:'/retailer/settlement'})
   	}
   },
   components: {

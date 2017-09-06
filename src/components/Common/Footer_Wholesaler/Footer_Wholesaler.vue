@@ -15,7 +15,7 @@
  		</li>
  		<li :class="{current: cur===3}" @click='toMore'>
  			<i class="icon-pfs-more font"></i>
- 			更多
+ 			设置
  		</li>
  	</ul>
   </div>
@@ -39,7 +39,7 @@ export default {
   		// this.$router.push({ path: '/wholesaler/message' })
   	},
   	toMore() {
-  		// this.$router.push({ path: '/wholesaler/more' })
+  		this.$router.push({ path: '/wholesaler/settlement' })
   	}
   }
 }

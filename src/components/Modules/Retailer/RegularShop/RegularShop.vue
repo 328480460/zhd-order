@@ -75,6 +75,7 @@ export default {
   	},
   	allow(){
   		this.current_optation.allow_order = true;
+  		this.optation = false;
   		// to back
   	},
   	delete_shop() {
@@ -82,10 +83,12 @@ export default {
   		this.regular_info = this.regular_info.filter((value, index) => {
   			return this.current_optation !== value;
   		})
+  		this.optation = false;
   	},
   	forbiden() {
   		// to back
   		this.current_optation.allow_order = false;
+  		this.optation = false;
   	},
   	cancle() {
   		this.optation = false;

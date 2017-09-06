@@ -89,5 +89,9 @@ export default new Router({
 		path: '/wholesaler/goods',
 		name: 'Goods',
 		component: WholeSaler.Goods
+	},{
+		path: '/wholesaler/settlement',
+		name: 'Settlement',
+		component: WholeSaler.Settlement
 	}]
 })
