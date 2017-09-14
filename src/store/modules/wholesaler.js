@@ -2,8 +2,10 @@ import baseUrl from './baseurl.js';
 
 //批发商订单管理接口
 var order_path = baseUrl + '/api/wholesaler/wholesalerOrder';
-// 批发商修改订单接口
+// 批发商配货订单接口
 var updata_order_path  = baseUrl + '/api/wholesaler/update_order';
+// 批发商操作订单状态接口
+var updata_state_path = baseUrl + '/api/wholesaler/update_state';
 // 批发商删除订单接口
 var delete_order_path  = baseUrl + '/api/wholesaler/delete_order';
 // 批发商首页接口
@@ -17,6 +19,7 @@ var updata_goods_path =  baseUrl + '/api/wholesaler/updata_goods';
 export default {
 	order_path,
 	updata_order_path,
+	updata_state_path,
 	delete_order_path,
 	index_path,
 	goods_path,

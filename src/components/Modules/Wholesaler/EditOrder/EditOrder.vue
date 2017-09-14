@@ -69,7 +69,6 @@ export default {
   },
   methods:{
   	goBack() {
-  		console.log('cancle')
   		this.$store.commit('drop_edit_order', this.origin_order);
   		this.$router.push({path:'/wholesaler/order', query: {option: 'cancle',pay_way: this.$route.query.pay_way,order_state: this.$route.query.order_state}})
   	},
@@ -80,7 +79,6 @@ export default {
   		// console.log(this.finalPrice)
   	},
   	confirm() {
-  		console.log('confrim')
   		// 确认修改
   		this.order.disbursements = this.finalPrice;
   		this.$store.dispatch('wholesaler_updata_order', this.order);
@@ -95,7 +93,6 @@ export default {
 	    input.value = input.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
   		
   		this.finalPrice = input.value;
-  		// console.log(this.finalPrice);
   	}
   },
   components: {

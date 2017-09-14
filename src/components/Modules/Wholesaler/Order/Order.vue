@@ -54,6 +54,9 @@
 					<div class="pay-state">{{item.pay_state}}</div>
 					<div class="all-price">
 						<span class="text">应收款:</span>
+						<span class="count">￥{{item.allprice}}</span>
+						&nbsp;&nbsp;&nbsp;
+						<span class="text">实收款:</span>
 						<span class="count">￥{{item.disbursements}}</span>
 					</div>
 				</div>
@@ -69,14 +72,15 @@
 export default {
   name: 'wholesalerorder',
   created() {
+  	// console.log('created');
   	this.re_render();
   },
   data () {
     return {
       order_state: [{text:'待配货',state:'wait'},{text: '已配货', state:'prepared'},{text: '已发货', state: 'send'}, {text: '未付款', state: 'nopay'}, {text: '全部', state: 'all'}],
       pay_way: [{text: '全部订单',state: 'all'},{text: '定期结算',state: 'regular'},{text: '在线支付',state: 'online'},{text: '货到付款',state: 'cash'}],
-      pay_way_current: {text: '全部订单',state: 'all'},
-      order_state_current: 'wait',
+      // pay_way_current:  {text: '全部订单',state: 'all'},
+      // order_state_current: 'wait',
       key_word:'',
       isLoading: false,
       finish: false,
@@ -108,6 +112,7 @@ export default {
 		        	'待配货': [],
 		            '已配货': [],
 		            '已收货': [],
+		            '已发货': [],
 		            '已取消': []
 		     }
 	    },
@@ -137,6 +142,7 @@ export default {
 		        	'待配货': [],
 		            '已配货': [],
 		            '已收货': [],
+		            '已发货': [],
 		            '已取消': []
 		     }
 	    },
@@ -166,6 +172,7 @@ export default {
 		        	'待配货': [],
 		            '已配货': [],
 		            '已收货': [],
+		            '已发货': [],
 		            '已取消': []
 		     }
 	    }
@@ -188,13 +195,15 @@ export default {
   	},
   	change_state(order_state) {
   		this.$refs.order_list.scrollTop = 0;
-  		this.order_state_current = order_state.state;
+  		// this.order_state_current = order_state.state;
+  		this.$router.push({path:'/wholesaler/order',query: {pay_way:this.pay_way_current.state,order_state:order_state.state}})
   		this.re_render();
   	},
   	change_pay(pay_way){
   		this.$refs.order_list.scrollTop = 0;
-  		this.pay_way_current = pay_way;
+  		// this.pay_way_current = pay_way;
   		this.pay_show = false;
+  		this.$router.push({path:'/wholesaler/order',query: {pay_way:pay_way.state,order_state:this.order_state_current}})
   		this.re_render();
   	},
   	serach_order() {
@@ -206,8 +215,8 @@ export default {
   		this.finish = false;
   		var limit = {
 	  		keyword: this.key_word,
-	  		pay_way: this.pay_way_current.state,
-	  		order_state: this.order_state_current,
+	  		pay_way: this.pay_way_current.state || 'all',
+	  		order_state: this.order_state_current || 'wait',
 	  		page: this.page
 	  	}
   		this.$store.dispatch('wholesaler_order',limit).then((res) => {
@@ -222,6 +231,22 @@ export default {
   		if(btn == '配货') {
   			this.$store.commit('edit_order_detail', {order: order,scrollTop: this.$refs.order_list.scrollTop});
   			this.$router.push({path:'/wholesaler/editOrder',query: {pay_way:this.pay_way_current.state,order_state: this.order_state_current}});
+  		}
+  		if(btn == '发货') {
+  			this.$store.dispatch('wholesaler_updata_state', {order:order.order_code,btn: btn}).then((res) => {
+  				if(order.pay_way == '货到付款' || order.pay_way == '定期结算') {
+  					if(order.pay_state == '已付款') {
+  						this.change_state({text: '全部', state: 'all'});
+  						return
+  					}
+  				}
+  				this.change_state({text: '已发货', state: 'send'});
+  			});
+  		}
+  		if(btn == '结算' || btn == '取消订单') {
+  			this.$store.dispatch('wholesaler_updata_state', {order:order.order_code,btn: btn}).then((res) => {
+  				this.change_state({text: '全部', state: 'all'});
+  			});
   		}
   	},
   	toOrderDetail(order) {
@@ -288,6 +313,7 @@ export default {
   	if(from.name.indexOf('OrderDetail') > -1 ) {
   		next((vm) => {
   			vm.$refs.order_list.scrollTop = vm.$store.state.wholesaler_order_detail.scrollTop;
+  			// 如果操作是从详情中删除该条订单，则更新数据
   			vm.$nextTick(() => {
   				setTimeout(function() {
 	  				vm.$data.order = vm.$store.state.wholesaler_order_list;
@@ -301,6 +327,7 @@ export default {
   		next((vm) => {
   			if(vm.$route.query.option == 'confirm') {
   				vm.$data.order_state_current = vm.$route.query.order_state;
+
   				vm.$data.pay_way_current = vm.$data.pay_way.filter((value, index) => {
   					return value.state == vm.$route.query.pay_way;
   				})[0]
@@ -346,6 +373,15 @@ export default {
   	},
   	order() {
   		return this.$store.state.wholesaler_order_list;
+  	},
+  	pay_way_current() {
+  		var pay_current = this.pay_way.filter((value, index) => {
+  			return value.state == this.$route.query.pay_way;
+  		})
+  		return  pay_current[0];
+  	},
+  	order_state_current() {
+  		return this.$route.query.order_state
   	}
   }
 }

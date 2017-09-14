@@ -19,7 +19,7 @@
 				<div class="pay-state">{{order.pay_state}}</div>
 			</div> 
 			<div class="state-bottom">
-				<div class="delete" @click='delete_order' v-if='order.pay_state == "交易关闭"'><i class="icon-delete font" ></i></div>
+				<div class="delete" @click='delete_order' v-if='order.pay_state !== "交易关闭"'><i class="icon-delete font" ></i></div>
 				<div class="time">{{order.order_time}}</div>
 			</div>
 		</div>

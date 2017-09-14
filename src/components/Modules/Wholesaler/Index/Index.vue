@@ -64,7 +64,7 @@ export default {
   },
   methods: {
   	toOrder() {
-  		this.$router.push({path: '/wholesaler/order'})
+  		this.$router.push({path: '/wholesaler/order',query: {pay_way:'all',order_state:'wait'}})
   	},
   	toGoods() {
   		this.$router.push({path: '/wholesaler/goods'})
