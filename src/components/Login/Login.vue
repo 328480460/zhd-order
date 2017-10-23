@@ -78,8 +78,8 @@ export default {
 
 				if(this.userInfo.USERTYPE == 1003) {
 					// 零售商
-					// this.$router.push({path:'/retailer/index'});
-					this.$router.push({path:'/retailer/market', query: {market_id: this.userInfo.NODE_ID}});
+					this.$router.push({path:'/retailer/index'});
+					// this.$router.push({path:'/retailer/market', query: {market_id: this.userInfo.NODE_ID}});
 
 				}
 				if(this.userInfo.USERTYPE == 1002) {
