@@ -34,7 +34,7 @@
 		<div class="goods-info">
 			<div class="title">商品清单</div>
 			<div class="goods-list">
-				<div class="goods-item" v-for='(goods, index) in order.goodsList' v-if='index < showCount'>
+				<div class="goods-item" v-for='(goods, index) in order.goodsList' v-if='index < showCount' :key="index">
 					<div class="left">
 						<img :src="'http://202.106.219.6:13799/order/' + goods.url">
 						<div class="info">
